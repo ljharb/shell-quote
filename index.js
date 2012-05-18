@@ -18,13 +18,13 @@ exports.parse = function (s) {
             if (/^'/.test(s)) {
                 return s
                     .replace(/^'|'$/g, '')
-                    .replace(/\\(['\\])/g, '$1')
+                    .replace(/\\(["'\\$`(){}!#&*|])/g, '$1');
                 ;
             }
             else if (/^"/.test(s)) {
                 return s
                     .replace(/^"|"$/g, '')
-                    .replace(/\\(["\\])/g, '$1')
+                    .replace(/\\(["'\\$`(){}!#&*|])/g, '$1');
                 ;
             }
             else return s;
