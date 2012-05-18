@@ -27,7 +27,7 @@ exports.parse = function (s) {
                     .replace(/\\(["'\\$`(){}!#&*|])/g, '$1');
                 ;
             }
-            else return s.replace(/\\ /g, ' ');
+            else return s.replace(/\\([ "'\\$`(){}!#&*|])/g, '$1');
         })
     ;
 };
