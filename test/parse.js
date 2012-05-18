@@ -8,5 +8,7 @@ test('parse shell commands', function (t) {
         parse('beep "boop" \'foo bar baz\' "it\'s \\"so\\" groovy"'),
         [ 'beep', 'boop', 'foo bar baz', 'it\'s "so" groovy' ]
     );
+    
+    t.same(parse('a b\\ c d'), [ 'a', 'b c', 'd' ]);
     t.end();
 });
