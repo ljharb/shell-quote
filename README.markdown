@@ -3,6 +3,8 @@ shell-quote
 
 Parse and quote shell commands.
 
+[![build status](https://secure.travis-ci.org/substack/node-shell-quote.png)](http://travis-ci.org/substack/node-shell-quote)
+
 example
 =======
 
