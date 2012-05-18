@@ -13,7 +13,7 @@ exports.quote = function (xs) {
 };
 
 exports.parse = function (s) {
-    return s.match(/(['"])((\\\1|[^\1])*?)\1|\S+/g)
+    return s.match(/(['"])((\\\1|[^\1])*?)\1|(\\ |\S)+/g)
         .map(function (s) {
             if (/^'/.test(s)) {
                 return s
@@ -27,7 +27,7 @@ exports.parse = function (s) {
                     .replace(/\\(["'\\$`(){}!#&*|])/g, '$1');
                 ;
             }
-            else return s;
+            else return s.replace(/\\ /g, ' ');
         })
     ;
 };
