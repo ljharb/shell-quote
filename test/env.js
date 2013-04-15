@@ -1,12 +1,12 @@
-var test = require('tap').test;
+var test = require('tape');
 var parse = require('../').parse;
 
 test('expand environment variables', function (t) {
     t.same(parse('a $XYZ c', { XYZ: 'b' }), [ 'a', 'b', 'c' ]);
     t.same(parse('a${XYZ}c', { XYZ: 'b' }), [ 'abc' ]);
     t.same(parse('a${XYZ}c $XYZ', { XYZ: 'b' }), [ 'abcb b' ]);
-    t.same(parse('"_$X-$Y_"', { X: 'a', Y: 'b' }), [ '_a-b_' ]);
-    t.same(parse("'_$X-$Y_'", { X: 'a', Y: 'b' }), [ '_$X-$Y_' ]);
+    t.same(parse('"-$X-$Y-"', { X: 'a', Y: 'b' }), [ '-a-b-' ]);
+    t.same(parse("'-$X-$Y-'", { X: 'a', Y: 'b' }), [ '-$X-$Y-' ]);
     t.same(parse('qrs"$zzz"wxy', { zzz: 'tuv' }), [ 'qrstuvwxy' ]);
     t.same(parse("qrs'$zzz'wxy", { zzz: 'tuv' }), [ 'qrs$zzzwxy' ]);
     t.same(parse("qrs${zzz}wxy"), [ 'qrswxy' ]);
