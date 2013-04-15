@@ -31,12 +31,14 @@ exports.parse = function parse (s, env) {
             ;
         }
         else return s
-            .replace(/(^|[^\\])\$(\w+)/g, getVar)
-            .replace(/(^|[^\\])\${(\w+)}/g, getVar)
-            .replace(/(['"])((\\\1|[^\1])*?)\1/, function (s, q) {
-                return parse(s, env);
+            .replace(/(['"])((\\\1|[^\1])*?)\1|[^'"]+/g, function (s, q) {
+                if (/^['"]/.test(s)) return parse(s, env);
+                return s
+                    .replace(/(^|[^\\])\$(\w+)/g, getVar)
+                    .replace(/(^|[^\\])\${(\w+)}/g, getVar)
+                    .replace(/\\([ "'\\$`(){}!#&*|])/g, '$1')
+                ;
             })
-            .replace(/\\([ "'\\$`(){}!#&*|])/g, '$1')
         ;
     });
     
