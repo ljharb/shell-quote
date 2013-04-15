@@ -12,13 +12,10 @@ exports.quote = function (xs) {
     }).join(' ');
 };
 
-var re = {
-    chunk: /(['"])((\\\1|[^\1])*?)\1|(\\ |\S)+/g
-};
-
 exports.parse = function parse (s, env) {
     if (!env) env = {};
-    return s.match(re.chunk).map(function (s) {
+    var chunker = /(['"])((\\\1|[^\1])*?)\1|(\\ |\S)+/g;
+    return s.match(chunker).map(function (s) {
         if (/^'/.test(s)) {
             return s
                 .replace(/^'|'$/g, '')
@@ -36,6 +33,9 @@ exports.parse = function parse (s, env) {
         else return s
             .replace(/(^|[^\\])\$(\w+)/g, getVar)
             .replace(/(^|[^\\])\${(\w+)}/g, getVar)
+            .replace(/(['"])((\\\1|[^\1])*?)\1/, function (_, q, s) {
+                return parse(s, env);
+            })
             .replace(/\\([ "'\\$`(){}!#&*|])/g, '$1')
         ;
     });
