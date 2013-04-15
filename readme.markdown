@@ -22,7 +22,7 @@ a 'b c d' \$f '"g"'
 
 ## parse
 
-``` js`
+``` js
 var parse = require('shell-quote').parse;
 var xs = parse('a "b c" \\$def \'it\\\'s great\'');
 console.dir(xs);
@@ -32,6 +32,20 @@ output
 
 ```
 [ 'a', 'b c', '\\$def', 'it\'s great' ]
+```
+
+## parse with an environment variable
+
+``` js
+var parse = require('shell-quote').parse;
+var xs = parse('beep --boop="$PWD"', { PWD: '/home/robot' });
+console.dir(xs);
+```
+
+output
+
+```
+[ 'beep', '--boop=/home/robot' ]
 ```
 
 # methods
