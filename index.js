@@ -31,9 +31,9 @@ exports.parse = function (s, env) {
     
     function interpolate (s) {
         return s
-            .replace(/\\([ "'\\$`(){}!#&*|])/g, '$1')
             .replace(/(^|[^\\])\$(\w+)/g, getVar)
             .replace(/(^|[^\\])\${(\w+)}/g, getVar)
+            .replace(/\\([ "'\\$`(){}!#&*|])/g, '$1')
         ;
     }
     function getVar (_, pre, key) {
