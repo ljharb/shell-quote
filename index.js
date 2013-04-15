@@ -16,7 +16,7 @@ var re = {
     chunk: /(['"])((\\\1|[^\1])*?)\1|(\\ |\S)+/g
 };
 
-exports.parse = function (s, env) {
+exports.parse = function parse (s, env) {
     if (!env) env = {};
     return s.match(re.chunk).map(function (s) {
         if (/^'/.test(s)) {
@@ -26,18 +26,20 @@ exports.parse = function (s, env) {
             ;
         }
         else if (/^"/.test(s)) {
-            return interpolate(s.replace(/^"|"$/g, ''));
+            return s
+                .replace(/^"|"$/g, '')
+                .replace(/(^|[^\\])\$(\w+)/g, getVar)
+                .replace(/(^|[^\\])\${(\w+)}/g, getVar)
+                .replace(/\\([ "'\\$`(){}!#&*|])/g, '$1')
+            ;
         }
-        else return interpolate(s);
-    });
-    
-    function interpolate (s) {
-        return s
+        else return s
             .replace(/(^|[^\\])\$(\w+)/g, getVar)
             .replace(/(^|[^\\])\${(\w+)}/g, getVar)
             .replace(/\\([ "'\\$`(){}!#&*|])/g, '$1')
         ;
-    }
+    });
+    
     function getVar (_, pre, key) {
         return pre + String(env[key] || '');
     }
