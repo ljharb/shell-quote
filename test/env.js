@@ -17,3 +17,11 @@ test('expand environment variables', function (t) {
     
     t.end();
 });
+
+test('environment variables with metacharacters', function (t) {
+    t.same(parse('a $XYZ c', { XYZ: '"b"' }), [ 'a', '"b"', 'c' ]);
+    t.same(parse('a $XYZ c', { XYZ: '$X', X: 5 }), [ 'a', '$X', 'c' ]);
+    t.same(parse('a"$XYZ"c', { XYZ: "'xyz'" }), [ "a'xyz'c" ]);
+    
+    t.end();
+});
