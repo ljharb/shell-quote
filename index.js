@@ -33,7 +33,7 @@ exports.parse = function parse (s, env) {
         else return s
             .replace(/(^|[^\\])\$(\w+)/g, getVar)
             .replace(/(^|[^\\])\${(\w+)}/g, getVar)
-            .replace(/(['"])((\\\1|[^\1])*?)\1/, function (_, q, s) {
+            .replace(/(['"])((\\\1|[^\1])*?)\1/, function (s, q) {
                 return parse(s, env);
             })
             .replace(/\\([ "'\\$`(){}!#&*|])/g, '$1')
