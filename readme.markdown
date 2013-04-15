@@ -1,15 +1,12 @@
-shell-quote
-===========
+# shell-quote
 
 Parse and quote shell commands.
 
 [![build status](https://secure.travis-ci.org/substack/node-shell-quote.png)](http://travis-ci.org/substack/node-shell-quote)
 
-example
-=======
+# example
 
-quote
------
+## quote
 
 ``` js
 var quote = require('shell-quote').quote;
@@ -23,8 +20,7 @@ output
 a 'b c d' \$f '"g"'
 ```
 
-parse
------
+## parse
 
 ``` js`
 var parse = require('shell-quote').parse;
@@ -38,27 +34,23 @@ output
 [ 'a', 'b c', '\\$def', 'it\'s great' ]
 ```
 
-methods
-=======
+# methods
 
 ``` js
 var quote = require('shell-quote').quote;
 var parse = require('shell-quote').parse;
 ```
 
-quote(args)
------------
+## quote(args)
 
 Return a quoted string for the array `args` suitable for using in shell
 commands.
 
-parse(cmd)
-----------
+## parse(cmd)
 
 Return an array of arguments from the quoted string `cmd`.
 
-install
-=======
+# install
 
 With [npm](http://npmjs.org) do:
 
@@ -66,7 +58,6 @@ With [npm](http://npmjs.org) do:
 npm install shell-quote
 ```
 
-license
-=======
+# license
 
 MIT
