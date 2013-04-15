@@ -60,9 +60,12 @@ var parse = require('shell-quote').parse;
 Return a quoted string for the array `args` suitable for using in shell
 commands.
 
-## parse(cmd)
+## parse(cmd, env={})
 
 Return an array of arguments from the quoted string `cmd`.
+
+Interpolate embedded bash-style `$VARNAME` and `${VARNAME}` variables with
+the `env` object which like bash will replace undefined variables with `""`.
 
 # install
 
