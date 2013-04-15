@@ -37,6 +37,6 @@ exports.parse = function (s, env) {
         ;
     }
     function getVar (_, pre, key) {
-        return pre + String(env[key]);
+        return pre + String(env[key] || '');
     }
 };
