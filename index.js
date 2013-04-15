@@ -30,16 +30,13 @@ exports.parse = function parse (s, env) {
                 .replace(/\\([ "'\\$`(){}!#&*|])/g, '$1')
             ;
         }
-        else return s
-            .replace(/(['"])((\\\1|[^\1])*?)\1|[^'"]+/g, function (s, q) {
+        else return s.replace(
+            /(['"])((\\\1|[^\1])*?)\1|[^'"]+/g,
+            function (s, q) {
                 if (/^['"]/.test(s)) return parse(s, env);
-                return s
-                    .replace(/(^|[^\\])\$(\w+)/g, getVar)
-                    .replace(/(^|[^\\])\${(\w+)}/g, getVar)
-                    .replace(/\\([ "'\\$`(){}!#&*|])/g, '$1')
-                ;
-            })
-        ;
+                return parse('"' + s + '"', env);
+            }
+        );
     });
     
     function getVar (_, pre, key) {
