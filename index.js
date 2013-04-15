@@ -23,23 +23,21 @@ exports.parse = function (s, env) {
                 ;
             }
             else if (/^"/.test(s)) {
-                return s
-                    .replace(/^"|"$/g, '')
-                    .replace(/\\(["'\\$`(){}!#&*|])/g, '$1')
-                    .replace(/\$(\w+)/g, getVar)
-                    .replace(/\${(\w+)}/g, getVar)
-                ;
+                return interpolate(s.replace(/^"|"$/g, ''))
             }
-            else {
-                return s
-                    .replace(/\\([ "'\\$`(){}!#&*|])/g, '$1')
-                    .replace(/\$(\w+)/g, getVar)
-                    .replace(/\${(\w+)}/g, getVar)
-                ;
-            }
+            else return interpolate(s);
         })
     ;
+    
     function getVar (_, x) {
         return String(env[x])
+    }
+    
+    function interpolate (s) {
+        return s
+            .replace(/\\([ "'\\$`(){}!#&*|])/g, '$1')
+            .replace(/\$(\w+)/g, getVar)
+            .replace(/\${(\w+)}/g, getVar)
+        ;
     }
 };
