@@ -14,6 +14,7 @@ test('expand environment variables', function (t) {
     t.same(parse("ab\\$x", { x: 'c' }), [ 'ab$x' ]);
     t.same(parse("ab${x}def", { x: 'c' }), [ 'abcdef' ]);
     t.same(parse("ab\\${x}def", { x: 'c' }), [ 'ab${x}def' ]);
+    t.same(parse('"ab\\${x}def"', { x: 'c' }), [ 'ab${x}def' ]);
     
     t.end();
 });
