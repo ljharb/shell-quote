@@ -1,4 +1,4 @@
-var test = require('tap').test;
+var test = require('tape');
 var quote = require('../').quote;
 
 test('quote', function (t) {

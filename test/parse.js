@@ -1,4 +1,4 @@
-var test = require('tap').test;
+var test = require('tape');
 var parse = require('../').parse;
 
 test('parse shell commands', function (t) {
