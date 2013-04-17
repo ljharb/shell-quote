@@ -11,5 +11,6 @@ test('quote', function (t) {
         quote([ '$', '`', '\'' ]),
         '\\$ \\` "\'"'
     );
+    t.equal(quote([]), '');
     t.end();
 });

@@ -10,6 +10,9 @@ test('parse shell commands', function (t) {
     t.same(parse('a b\\ c d'), [ 'a', 'b c', 'd' ]);
     t.same(parse('\\$beep bo\\`op'), [ '$beep', 'bo`op' ]);
     t.same(parse('echo "foo = \\"foo\\""'), [ 'echo', 'foo = "foo"' ]);
+    t.same(parse(''), []);
+    t.same(parse(' '), []);
+    t.same(parse("\t"), []);
     
     t.end();
 });
