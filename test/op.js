@@ -17,6 +17,10 @@ test('single operators', function (t) {
         { op: '(' }, 'beep', { op: ';' }, 'boop', { op: ')' }
     ]);
     
+    t.same(parse('beep>boop'), [ 'beep', { op: '>' }, 'boop' ]);
+    t.same(parse('beep 2>boop'), [ 'beep', '2', { op: '>' }, 'boop' ]);
+    t.same(parse('beep<boop'), [ 'beep', { op: '<' }, 'boop' ]);
+    
     t.end();
 });
 
