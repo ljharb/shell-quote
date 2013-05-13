@@ -18,7 +18,7 @@ var META = '[|&;()<> \\t]';
 exports.parse = function parse (s, env) {
     var chunker = new RegExp(
         '([\'"])((\\\\\\1|[^\\1])*?)\\1'
-        + '|(\\\\[|&;()<> \\t]|[^\\s&|])+'
+        + '|(\\\\' + META + '|[^\\s&|])+'
         + '|([&|])',
         'g'
     );
