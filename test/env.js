@@ -26,3 +26,14 @@ test('environment variables with metacharacters', function (t) {
     
     t.end();
 });
+
+test('special shell parameters', function (t) {
+    var chars = '*@#?-$!0_'.split('');
+    t.plan(chars.length);
+    
+    chars.forEach(function (c) {
+        var env = {};
+        env['$' + c] = 'xxx';
+        t.same(parse('a $' + c + ' c', env), [ 'a', 'xxx', 'c' ]);
+    });
+});
