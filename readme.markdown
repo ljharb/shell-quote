@@ -81,6 +81,11 @@ Return an array of arguments from the quoted string `cmd`.
 Interpolate embedded bash-style `$VARNAME` and `${VARNAME}` variables with
 the `env` object which like bash will replace undefined variables with `""`.
 
+`env` is usually an object but it can also be a function to perform lookups.
+When `env(key)` returns a string, its result will be output just like `env[key]`
+would. When `env(key)` returns an object, it will be inserted into the result
+array like the operator objects.
+
 When a bash operator is encountered, the element in the array with be an object
 with an `"op"` key set to the operator string. For example:
 
