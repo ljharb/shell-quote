@@ -8,8 +8,8 @@
         "test" : "test"
     },
     "devDependencies" : {
-        "tap" : "~0.4.0",
-        "tape" : "~0.3.3"
+        "tap" : "~0.4.2",
+        "tape" : "~1.0.2"
     },
     "scripts" : {
         "test" : "tap test/*.js"
