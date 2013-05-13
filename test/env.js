@@ -33,7 +33,7 @@ test('special shell parameters', function (t) {
     
     chars.forEach(function (c) {
         var env = {};
-        env['$' + c] = 'xxx';
+        env[c] = 'xxx';
         t.same(parse('a $' + c + ' c', env), [ 'a', 'xxx', 'c' ]);
     });
 });
