@@ -39,8 +39,8 @@ exports.parse = function parse (s, env) {
         else if (/^"/.test(s)) {
             return s
                 .replace(/^"|"$/g, '')
-                .replace(/(^|[^\\])\$(\w+)/g, getVar)
-                .replace(/(^|[^\\])\${(\w+)}/g, getVar)
+                .replace(/(^|[^\\])\$(\w+|[*@#?$!0_-])/g, getVar)
+                .replace(/(^|[^\\])\${(\w+|[*@#?$!0_-])}/g, getVar)
                 .replace(/\\([ "'\\$`(){}!#&*|])/g, '$1')
             ;
         }
