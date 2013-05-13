@@ -48,6 +48,20 @@ output
 [ 'beep', '--boop=/home/robot' ]
 ```
 
+## parsing shell operators
+
+``` js
+var parse = require('shell-quote').parse;
+var xs = parse('beep || boop > /byte');
+console.dir(xs);
+```
+
+output:
+
+```
+[ 'beep', { op: '||' }, 'boop', { op: '>' }, '/byte' ]
+```
+
 # methods
 
 ``` js
@@ -66,6 +80,19 @@ Return an array of arguments from the quoted string `cmd`.
 
 Interpolate embedded bash-style `$VARNAME` and `${VARNAME}` variables with
 the `env` object which like bash will replace undefined variables with `""`.
+
+When a bash operator is encountered, the element in the array with be an object
+with an `"op"` key set to the operator string. For example:
+
+```
+'beep || boop > /byte'
+```
+
+parses as:
+
+```
+[ 'beep', { op: '||' }, 'boop', { op: '>' }, '/byte' ]
+```
 
 # install
 
