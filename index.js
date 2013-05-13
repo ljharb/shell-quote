@@ -15,12 +15,12 @@ exports.quote = function (xs) {
 var CONTROL = '(?:' + [
     '\\|\\|', '\\&\\&', ';;', '\\|\\&', '[&;()|]'
 ].join('|') + ')';
-var META = '[|&;()<> \\t]';
+var META = '|&;()<> \\t';
 
 exports.parse = function parse (s, env) {
     var chunker = new RegExp([
         '([\'"])((\\\\\\1|[^\\1])*?)\\1', // quotes
-        '(\\\\' + META + '|[^\\s&|])+', // barewords
+        '(\\\\[' + META + ']|[^\\s' + META + '])+', // barewords
         '(' + CONTROL + ')' // control chars
     ].join('|'), 'g');
     var match = s.match(chunker);
@@ -41,7 +41,7 @@ exports.parse = function parse (s, env) {
                 .replace(/\\([ "'\\$`(){}!#&*|])/g, '$1')
             ;
         }
-        else if (/^[&|]$/.test(s)) {
+        else if (RegExp('^[' + META + ']$').test(s)) {
             return { op: s };
         }
         else return s.replace(
