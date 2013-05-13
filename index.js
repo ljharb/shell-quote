@@ -41,7 +41,7 @@ exports.parse = function parse (s, env) {
                 .replace(/\\([ "'\\$`(){}!#&*|])/g, '$1')
             ;
         }
-        else if (RegExp('^[' + META + ']$').test(s)) {
+        else if (RegExp('^' + CONTROL + '$').test(s)) {
             return { op: s };
         }
         else return s.replace(
