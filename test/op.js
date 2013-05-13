@@ -26,5 +26,24 @@ test('double operators', function (t) {
     t.same(parse('beep ||boop'), [ 'beep', { op: '||' }, 'boop' ]);
     t.same(parse('beep|| boop'), [ 'beep', { op: '||' }, 'boop' ]);
     t.same(parse('beep  ||   boop'), [ 'beep', { op: '||' }, 'boop' ]);
+    
+    t.same(parse('beep && boop'), [ 'beep', { op: '&&' }, 'boop' ]);
+    t.same(
+        parse('beep && boop || byte'),
+        [ 'beep', { op: '&&' }, 'boop', { op: '||' }, 'byte' ]
+    );
+    t.same(
+        parse('beep&&boop||byte'),
+        [ 'beep', { op: '&&' }, 'boop', { op: '||' }, 'byte' ]
+    );
+    t.same(
+        parse('beep\\&\\&boop||byte'),
+        [ 'beep&&boop', { op: '||' }, 'byte' ]
+    );
+    t.same(
+        parse('beep\\&&boop||byte'),
+        [ 'beep&', { op: '&' }, 'boop', { op: '||' }, 'byte' ]
+    );
+    
     t.end();
 });
