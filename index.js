@@ -12,14 +12,16 @@ exports.quote = function (xs) {
     }).join(' ');
 };
 
-var CONTROL = '(?:\\|\\||\\&\\&|;;|\\|\\&[&;()|])';
+var CONTROL = '(?:' + [
+    '\\|\\|', '\\&\\&', ';;', '\\|\\&', '[&;()|]'
+].join('|') + ')';
 var META = '[|&;()<> \\t]';
 
 exports.parse = function parse (s, env) {
     var chunker = new RegExp([
         '([\'"])((\\\\\\1|[^\\1])*?)\\1', // quotes
         '(\\\\' + META + '|[^\\s&|])+', // barewords
-        '([&|])' // control chars
+        '(' + CONTROL + ')' // control chars
     ].join('|'), 'g');
     var match = s.match(chunker);
     if (!match) return [];
