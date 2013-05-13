@@ -12,8 +12,16 @@ exports.quote = function (xs) {
     }).join(' ');
 };
 
+var CONTROL = '(?:\\|\\||\\&\\&|;;|\\|\\&[&;()|])';
+var META = '[|&;()<> \\t]';
+
 exports.parse = function parse (s, env) {
-    var chunker = /(['"])((\\\1|[^\1])*?)\1|(\\[ \t&|]|[^\s&|])+|([&|])/g;
+    var chunker = new RegExp(
+        '([\'"])((\\\\\\1|[^\\1])*?)\\1'
+        + '|(\\\\[|&;()<> \\t]|[^\\s&|])+'
+        + '|([&|])',
+        'g'
+    );
     var match = s.match(chunker);
     if (!match) return [];
     if (!env) env = {};
