@@ -44,6 +44,10 @@ test('double operators', function (t) {
         parse('beep\\&&boop||byte'),
         [ 'beep&', { op: '&' }, 'boop', { op: '||' }, 'byte' ]
     );
+    t.same(
+        parse('beep;;boop|&byte'),
+        [ 'beep', { op: ';;' }, 'boop', { op: '|&' }, 'byte' ]
+    );
     
     t.end();
 });
