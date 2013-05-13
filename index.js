@@ -29,6 +29,7 @@ exports.parse = function (s, env) {
     var mapped = parse(s, env);
     if (typeof env !== 'function') return mapped;
     return mapped.reduce(function (acc, s) {
+        if (typeof s === 'object') return acc.concat(s);
         var xs = s.split(RegExp('(' + TOKEN + '.*?' + TOKEN + ')', 'g'));
         if (xs.length === 1) return acc.concat(xs[0]);
         return acc.concat(xs.filter(Boolean).map(function (x) {
