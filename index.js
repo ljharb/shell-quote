@@ -13,7 +13,7 @@ exports.quote = function (xs) {
 };
 
 exports.parse = function parse (s, env) {
-    var chunker = /(['"])((\\\1|[^\1])*?)\1|(\\ |\S)+/g;
+    var chunker = /(['"])((\\\1|[^\1])*?)\1|(\\ |\S)+|([&|])/g;
     var match = s.match(chunker);
     if (!match) return [];
     if (!env) env = {};
@@ -31,6 +31,9 @@ exports.parse = function parse (s, env) {
                 .replace(/(^|[^\\])\${(\w+)}/g, getVar)
                 .replace(/\\([ "'\\$`(){}!#&*|])/g, '$1')
             ;
+        }
+        else if (/^[&|]$/.test(s)) {
+            return { op: s };
         }
         else return s.replace(
             /(['"])((\\\1|[^\1])*?)\1|[^'"]+/g,
