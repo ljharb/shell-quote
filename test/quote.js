@@ -14,3 +14,8 @@ test('quote', function (t) {
     t.equal(quote([]), '');
     t.end();
 });
+
+test('quote ops', function (t) {
+    t.equal(quote([ 'a', { op: '|' }, 'b' ]), 'a \\| b');
+    t.end();
+});
