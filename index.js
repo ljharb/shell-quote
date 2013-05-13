@@ -16,12 +16,11 @@ var CONTROL = '(?:\\|\\||\\&\\&|;;|\\|\\&[&;()|])';
 var META = '[|&;()<> \\t]';
 
 exports.parse = function parse (s, env) {
-    var chunker = new RegExp(
-        '([\'"])((\\\\\\1|[^\\1])*?)\\1'
-        + '|(\\\\' + META + '|[^\\s&|])+'
-        + '|([&|])',
-        'g'
-    );
+    var chunker = new RegExp([
+        '([\'"])((\\\\\\1|[^\\1])*?)\\1', // quotes
+        '(\\\\' + META + '|[^\\s&|])+', // barewords
+        '([&|])' // control chars
+    ].join('|'), 'g');
     var match = s.match(chunker);
     if (!match) return [];
     if (!env) env = {};
