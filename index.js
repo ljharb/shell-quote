@@ -57,6 +57,9 @@ exports.parse = function parse (s, env) {
     });
     
     function getVar (_, pre, key) {
-        return pre + String(env[key] || '');
+        if (typeof env === 'function') {
+            return pre + String(env(key) || '');
+        }
+        else return pre + String(env[key] || '');
     }
 };
