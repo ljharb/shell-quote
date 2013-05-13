@@ -19,3 +19,12 @@ test('single operators', function (t) {
     
     t.end();
 });
+
+test('double operators', function (t) {
+    t.same(parse('beep || boop'), [ 'beep', { op: '||' }, 'boop' ]);
+    t.same(parse('beep||boop'), [ 'beep', { op: '||' }, 'boop' ]);
+    t.same(parse('beep ||boop'), [ 'beep', { op: '||' }, 'boop' ]);
+    t.same(parse('beep|| boop'), [ 'beep', { op: '||' }, 'boop' ]);
+    t.same(parse('beep  ||   boop'), [ 'beep', { op: '||' }, 'boop' ]);
+    t.end();
+});
