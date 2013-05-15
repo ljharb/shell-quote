@@ -14,6 +14,7 @@ test('parse shell commands', function (t) {
     t.same(parse(' '), []);
     t.same(parse("\t"), []);
     t.same(parse('a"b c d"e'), [ 'ab c de' ]);
+    t.same(parse('a\\ b"c d"\\ e f'), [ 'a bc d e', 'f' ]);
     
     t.end();
 });
