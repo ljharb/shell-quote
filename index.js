@@ -43,7 +43,7 @@ exports.parse = function (s, env) {
 
 function parse (s, env) {
     var chunker = new RegExp([
-        '([\'"])((\\\\\\1|[^\\1])*?)\\1', // quotes
+        '[^\\s\'"]*([\'"])((\\\\\\1|[^\\1])*?)\\1[^\\s\'"]*', // quotes
         '(\\\\[' + META + ']|[^\\s' + META + '])+', // barewords
         '(' + CONTROL + ')' // control chars
     ].join('|'), 'g');
@@ -57,7 +57,7 @@ function parse (s, env) {
                 .replace(/\\(["'\\$`(){}!#&*|])/g, '$1')
             ;
         }
-        else if (/^"/.test(s) && typeof env === 'function') {
+        else if (/^([^"']*)"/.test(s) && typeof env === 'function') {
             return s.replace(/^"|"$/g, '')
                 .replace(/(^|[^\\])\$(\w+|[*@#?$!0_-])/g, getVar)
                 .replace(/(^|[^\\])\${(\w+|[*@#?$!0_-])}/g, getVar)
