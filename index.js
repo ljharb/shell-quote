@@ -19,9 +19,9 @@ var CONTROL = '(?:' + [
     '\\|\\|', '\\&\\&', ';;', '\\|\\&', '[&;()|<>]'
 ].join('|') + ')';
 var META = '|&;()<> \\t';
-var BAREWORD = '(\\\\[' + META + ']|[^\\s' + META + '])+';
-var SINGLE_QUOTE = '[^\\s\'"]*(")((\\\\"|[^"])*?)"[^\\s\'"]*';
-var DOUBLE_QUOTE = '[^\\s\'"]*(\')((\\\\\'|[^\'])*?)\'[^\\s\'"]*';
+var BAREWORD = '(\\\\[\'"' + META + ']|[^\\s\'"' + META + '])+';
+var SINGLE_QUOTE = '"((\\\\"|[^"])*?)"';
+var DOUBLE_QUOTE = '\'((\\\\\'|[^\'])*?)\'';
 
 var TOKEN = '';
 for (var i = 0; i < 4; i++) {
@@ -46,12 +46,11 @@ exports.parse = function (s, env) {
 
 function parse (s, env) {
     var chunker = new RegExp([
-        SINGLE_QUOTE,
-        DOUBLE_QUOTE,
-        BAREWORD,
+        '(' + BAREWORD + '|' + SINGLE_QUOTE + '|' + DOUBLE_QUOTE + ')*',
         '(' + CONTROL + ')' // control chars
     ].join('|'), 'g');
-    var match = s.match(chunker);
+    var match = s.match(chunker).filter(Boolean);
+    
     if (!match) return [];
     if (!env) env = {};
     return match.map(function (s) {
