@@ -43,7 +43,8 @@ exports.parse = function (s, env) {
 
 function parse (s, env) {
     var chunker = new RegExp([
-        '[^\\s\'"]*([\'"])((\\\\\\1|[^\\1])*?)\\1[^\\s\'"]*', // quotes
+        '[^\\s\'"]*(")((\\\\"|[^"])*?)"[^\\s\'"]*', // double quotes
+        '[^\\s\'"]*(\')((\\\\\'|[^\'])*?)\'[^\\s\'"]*', // single quotes
         '(\\\\[' + META + ']|[^\\s' + META + '])+', // barewords
         '(' + CONTROL + ')' // control chars
     ].join('|'), 'g');
