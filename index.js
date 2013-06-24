@@ -46,8 +46,8 @@ exports.parse = function (s, env) {
 
 function parse (s, env) {
     var chunker = new RegExp([
-        '(' + BAREWORD + '|' + SINGLE_QUOTE + '|' + DOUBLE_QUOTE + ')*',
-        '(' + CONTROL + ')' // control chars
+        '(' + CONTROL + ')', // control chars
+        '(' + BAREWORD + '|' + SINGLE_QUOTE + '|' + DOUBLE_QUOTE + ')*'
     ].join('|'), 'g');
     var match = s.match(chunker).filter(Boolean);
     
