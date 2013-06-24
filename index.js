@@ -19,6 +19,9 @@ var CONTROL = '(?:' + [
     '\\|\\|', '\\&\\&', ';;', '\\|\\&', '[&;()|<>]'
 ].join('|') + ')';
 var META = '|&;()<> \\t';
+var BAREWORD = '(\\\\[' + META + ']|[^\\s' + META + '])+';
+var SINGLE_QUOTE = '[^\\s\'"]*(")((\\\\"|[^"])*?)"[^\\s\'"]*';
+var DOUBLE_QUOTE = '[^\\s\'"]*(\')((\\\\\'|[^\'])*?)\'[^\\s\'"]*';
 
 var TOKEN = '';
 for (var i = 0; i < 4; i++) {
@@ -43,9 +46,9 @@ exports.parse = function (s, env) {
 
 function parse (s, env) {
     var chunker = new RegExp([
-        '[^\\s\'"]*(")((\\\\"|[^"])*?)"[^\\s\'"]*', // double quotes
-        '[^\\s\'"]*(\')((\\\\\'|[^\'])*?)\'[^\\s\'"]*', // single quotes
-        '(\\\\[' + META + ']|[^\\s' + META + '])+', // barewords
+        SINGLE_QUOTE,
+        DOUBLE_QUOTE,
+        BAREWORD,
         '(' + CONTROL + ')' // control chars
     ].join('|'), 'g');
     var match = s.match(chunker);
