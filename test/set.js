@@ -14,6 +14,16 @@ test('set env vars', function (t) {
         parse('X="7 8 9" printx'),
         [ 'X=7 8 9', 'printx' ]
     );
+    t.same(
+        parse('X="7 8 9"; printx'),
+        [ 'X=7 8 9', { op: ';' }, 'printx' ]
+    );
+    t.same(
+        parse('X="7 8 9"; printx', function (key) {
+            t.fail('should not have matched any keys');
+        }),
+        [ 'X=7 8 9', { op: ';' }, 'printx' ]
+    );
     
     t.end();
 });
