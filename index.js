@@ -1,5 +1,7 @@
+var json = typeof JSON !== undefined ? JSON : require('jsonify');
+
 exports.quote = function (xs) {
-    return xs.map(function (s) {
+    return map(xs, function (s) {
         if (s && typeof s === 'object') {
             return s.op.replace(/(.)/g, '\\$1');
         }
@@ -31,13 +33,13 @@ for (var i = 0; i < 4; i++) {
 exports.parse = function (s, env) {
     var mapped = parse(s, env);
     if (typeof env !== 'function') return mapped;
-    return mapped.reduce(function (acc, s) {
+    return reduce(mapped, function (acc, s) {
         if (typeof s === 'object') return acc.concat(s);
         var xs = s.split(RegExp('(' + TOKEN + '.*?' + TOKEN + ')', 'g'));
         if (xs.length === 1) return acc.concat(xs[0]);
-        return acc.concat(xs.filter(Boolean).map(function (x) {
+        return acc.concat(map(filter(xs, Boolean), function (x) {
             if (RegExp('^' + TOKEN).test(x)) {
-                return JSON.parse(x.split(TOKEN)[1]);
+                return json.parse(x.split(TOKEN)[1]);
             }
             else return x;
         }));
@@ -49,11 +51,11 @@ function parse (s, env) {
         '(' + CONTROL + ')', // control chars
         '(' + BAREWORD + '|' + SINGLE_QUOTE + '|' + DOUBLE_QUOTE + ')*'
     ].join('|'), 'g');
-    var match = s.match(chunker).filter(Boolean);
+    var match = filter(s.match(chunker), Boolean);
     
     if (!match) return [];
     if (!env) env = {};
-    return match.map(function (s) {
+    return map(match, function (s) {
         if (RegExp('^' + CONTROL + '$').test(s)) {
             return { op: s };
         }
@@ -169,8 +171,34 @@ function parse (s, env) {
         if (r === undefined) r = '';
         
         if (typeof r === 'object') {
-            return pre + TOKEN + JSON.stringify(r) + TOKEN;
+            return pre + TOKEN + json.stringify(r) + TOKEN;
         }
         else return pre + r;
     }
 };
+
+function filter (xs, f) {
+    if (xs.filter) return xs.filter(f);
+    var res = [];
+    for (var i = 0; i < xs.length; i++) {
+        if (f(xs[i], i)) res.push(xs[i]);
+    }
+    return res;
+}
+
+function map (xs, f) {
+    if (xs.map) return xs.map(f);
+    var res = [];
+    for (var i = 0; i < xs.length; i++) {
+        res.push(f(xs[i], i));
+    }
+    return res;
+}
+
+function reduce (xs, f, acc) {
+    if (xs.reduce) return xs.reduce(f, acc);
+    for (var i = 0; i < xs.length; i++) {
+        acc = f(acc, xs[i], i);
+    }
+    return acc;
+}
