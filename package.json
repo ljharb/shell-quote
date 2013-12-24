@@ -3,16 +3,11 @@
     "version" : "1.4.0",
     "description" : "quote and parse shell commands",
     "main" : "index.js",
-    "directories" : {
-        "example" : "example",
-        "test" : "test"
-    },
     "devDependencies" : {
-        "tap" : "~0.4.2",
-        "tape" : "~1.0.2"
+        "tape" : "~2.3.0"
     },
     "scripts" : {
-        "test" : "tap test/*.js"
+        "test" : "tape test/*.js"
     },
     "repository" : {
         "type" : "git",
@@ -42,6 +37,5 @@
         "email" : "mail@substack.net",
         "url" : "http://substack.net"
     },
-    "license" : "MIT",
-    "engine" : { "node" : ">=0.4" }
+    "license" : "MIT"
 }
