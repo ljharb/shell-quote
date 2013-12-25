@@ -1,6 +1,7 @@
 var json = typeof JSON !== undefined ? JSON : require('jsonify');
-var shim = require('./lib/shim');
-var map = shim.map, filter = shim.filter, reduce = shim.reduce;
+var map = require('array-map');
+var filter = require('array-filter');
+var reduce = require('array-reduce');
 
 exports.quote = function (xs) {
     return map(xs, function (s) {
