@@ -1,6 +1,6 @@
 {
   "name": "shell-quote",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "quote and parse shell commands",
   "main": "index.js",
   "devDependencies": {
