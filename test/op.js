@@ -52,6 +52,14 @@ test('double operators', function (t) {
         parse('beep;;boop|&byte'),
         [ 'beep', { op: ';;' }, 'boop', { op: '|&' }, 'byte' ]
     );
+    t.same(
+        parse('beep<(boop)'),
+        [ 'beep', { op: '<(' }, 'boop', { op: ')' } ]
+    );
+    t.same(
+        parse('beep<<(boop)'),
+        [ 'beep', { op: '<' }, { op: '<(' }, 'boop', { op: ')' } ]
+    );
     
     t.end();
 });
