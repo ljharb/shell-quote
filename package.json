@@ -42,10 +42,5 @@
     "url": "http://substack.net"
   },
   "license": "MIT",
-  "dependencies": {
-    "jsonify": "~0.0.0",
-    "array-filter": "~0.0.0",
-    "array-reduce": "~0.0.0",
-    "array-map": "~0.0.0"
-  }
+  "dependencies": {}
 }
