@@ -189,7 +189,7 @@ function parse (s, env, opts) {
 
     function getVar (_, pre, key) {
         var r = typeof env === 'function' ? env(key) : env[key];
-        if (r === undefined) r = '';
+        if (r === undefined) r = '$';
 
         if (typeof r === 'object') {
             return pre + TOKEN + json.stringify(r) + TOKEN;
