@@ -3,8 +3,6 @@ var map = require('array-map');
 var filter = require('array-filter');
 var reduce = require('array-reduce');
 
-var isWin = typeof process !== 'undefined' && process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE)
-
 exports.quote = function (xs) {
     return map(xs, function (s) {
         if (s && typeof s === 'object') {
@@ -20,7 +18,7 @@ exports.quote = function (xs) {
             s = String(s).replace(/([A-z]:)?([#!"$&'()*,:;<=>?@\[\\\]^`{|}])/g, '$1\\$2');
 
             // unescape paths in windows
-            if (isWin) s = s.replace(/\\\\/g, '\\')
+            s = s.replace(/\\\\/g, '\\')
             return s
         }
     }).join(' ');
