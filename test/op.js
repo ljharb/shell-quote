@@ -55,6 +55,15 @@ test('double operators', function (t) {
 
     t.same(parse('beep 2>&1'), [ 'beep', '2', { op: '>&' }, '1' ]);
 
+    t.same(
+        parse('beep<(boop)'),
+        [ 'beep', { op: '<(' }, 'boop', { op: ')' } ]
+    );
+    t.same(
+        parse('beep<<(boop)'),
+        [ 'beep', { op: '<' }, { op: '<(' }, 'boop', { op: ')' } ]
+    );
+
     t.end();
 });
 
