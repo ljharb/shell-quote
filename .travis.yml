@@ -21,5 +21,7 @@ matrix:
   exclude:
     - os: windows
       node_js: "0.8"
+    - os: windows
+      node_js: "iojs"
 before_install:
   - 'if [ $TRAVIS_NODE_VERSION == 0.8 ]; then nvm install-latest-npm; fi'
