@@ -4,7 +4,7 @@ node_js:
   - "0.10"
   - "4"
 before_install:
-  - 'if [ $TRAVIS_NODE_VERSION == 0.8 ]; then npm i -g npm@1.x; fi'
+  - 'if [ $TRAVIS_NODE_VERSION == 0.8 ]; then npm i -g npm@1.4.28; fi'
 os:
   - linux
   - osx
