@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.7.1
+* Fix `$` being removed when not part of an environment variable name. ([@Adman](https://github.com/Admin) in [#32](https://github.com/substack/node-shell-quote/pull/32))
+
 ## 1.7.0
 * Add support for parsing `>>` and `>&` redirection operators. ([@forivall](https://github.com/forivall) in [#16](https://github.com/substack/node-shell-quote/pull/16))
 * Add support for parsing `<(` process substitution operator. ([@cuonglm](https://github.com/cuonglm) in [#15](https://github.com/substack/node-shell-quote/pull/15))
