@@ -1,13 +1,15 @@
 language: node_js
-node_js:
-  - "0.8"
-  - "0.10"
-  - "4"
-before_install:
-  # Old npm certs are untrusted https://github.com/npm/npm/issues/20191
-  - 'if [ "${TRAVIS_NODE_VERSION}" = "0.6" ] || [ "${TRAVIS_NODE_VERSION}" = "0.8" ]; then export NPM_CONFIG_STRICT_SSL=false; fi'
-  - 'if [ $TRAVIS_NODE_VERSION == 0.8 ]; then npm install npm@1.4.28; export PATH="$PWD/node_modules/.bin/:$PATH"; fi'
 os:
   - linux
   - osx
   - windows
+node_js:
+  - "0.8"
+  - "0.10"
+  - "4"
+matrix:
+  exclude:
+    - os: windows
+      node_js: "0.8"
+before_install:
+  - 'if [ $TRAVIS_NODE_VERSION == 0.8 ]; then nvm install-latest-npm; fi'
