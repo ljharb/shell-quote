@@ -1,7 +1,10 @@
 language: node_js
 node_js:
+  - "0.8"
   - "0.10"
   - "4"
+before_install:
+  - 'if [ $TRAVIS_NODE_VERSION == 0.8 ]; then npm i -g npm@1.x; fi'
 os:
   - linux
   - osx
