@@ -15,8 +15,9 @@ test('quote', function (t) {
     t.equal(quote(["a\nb"]), "'a\nb'");
     t.equal(quote([' #(){}*|][!']), "' #(){}*|][!'");
     t.equal(quote(["'#(){}*|][!"]), '"\'#(){}*|][\\!"');
-    t.equal(quote(["X#(){}*|][!"]), "X\\#\\(\\){}\\*\\|][\\!");
+    t.equal(quote(["X#(){}*|][!"]), "X\\#\\(\\)\\{\\}\\*\\|\\]\\[\\!");
     t.equal(quote(["a\n#\nb"]), "'a\n#\nb'");
+    t.equal(quote(['><;{}']), '\\>\\<\\;\\{\\}');
     t.equal(quote([ 'a', 1, true, false ]), 'a 1 true false');
     t.equal(quote([ 'a', 1, null, undefined ]), 'a 1 null undefined');
     t.end();
@@ -30,3 +31,11 @@ test('quote ops', function (t) {
     );
     t.end();
 });
+
+test('quote windows paths', function (t) {
+    var path = 'C:\\projects\\node-shell-quote\\index.js'
+
+    t.equal(quote([path, 'b', 'c d']), 'C:\\projects\\node-shell-quote\\index.js b \'c d\'')
+
+    t.end()
+})
