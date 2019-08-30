@@ -10,11 +10,7 @@ exports.quote = function (xs) {
             return '"' + s.replace(/(["\\$`!])/g, '\\$1') + '"';
         }
         else {
-            s = String(s).replace(/([A-z]:)?([#!"$&'()*,:;<=>?@\[\\\]^`{|}])/g, '$1\\$2');
-
-            // unescape paths in windows
-            s = s.replace(/\\\\/g, '\\')
-            return s
+            return String(s).replace(/([A-z]:)?([#!"$&'()*,:;<=>?@\[\\\]^`{|}])/g, '$1\\$2');
         }
     }).join(' ');
 };

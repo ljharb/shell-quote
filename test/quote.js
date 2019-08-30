@@ -32,7 +32,7 @@ test('quote ops', function (t) {
     t.end();
 });
 
-test('quote windows paths', function (t) {
+test('quote windows paths', { skip: 'breaking change, disabled until 2.x' }, function (t) {
     var path = 'C:\\projects\\node-shell-quote\\index.js'
 
     t.equal(quote([path, 'b', 'c d']), 'C:\\projects\\node-shell-quote\\index.js b \'c d\'')
