@@ -20,6 +20,7 @@ test('quote', function (t) {
     t.equal(quote(['><;{}']), '\\>\\<\\;\\{\\}');
     t.equal(quote([ 'a', 1, true, false ]), 'a 1 true false');
     t.equal(quote([ 'a', 1, null, undefined ]), 'a 1 null undefined');
+    t.equal(quote([ 'a\\x' ]), 'a\\\\x');
     t.end();
 });
 
