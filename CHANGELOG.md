@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.7.3
+* Fix a security issue where the regex for windows drive letters allowed some shell meta-characters
+to escape the quoting rules. (CVE-2021-42740)
+
 ## 1.7.2
 * Fix a regression introduced in 1.6.3. This reverts the Windows path quoting fix. ([144e1c2](https://github.com/substack/node-shell-quote/commit/144e1c20cd57549a414c827fb3032e60b7b8721c))
 
