@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.7.4](https://github.com/ljharb/shell-quote/compare/1.7.3...v1.7.4) - 2022-10-12
+
+### Merged
+
+- Add node_modules to .gitignore [`#48`](https://github.com/ljharb/shell-quote/pull/48)
+
+### Commits
+
+- [eslint] fix indentation and whitespace [`aaa9d1f`](https://github.com/ljharb/shell-quote/commit/aaa9d1f65bf3445e6af1efaa4a8f8c13a21aa593)
+- [eslint] additional cleanup [`397cb62`](https://github.com/ljharb/shell-quote/commit/397cb628f3d96e4e47763147c0d6074997a13880)
+- [meta] add `auto-changelog` [`497fca5`](https://github.com/ljharb/shell-quote/commit/497fca509af3b7d6daaba459bad1f45ac0af3ff1)
+- [actions] add reusable workflows [`4763c36`](https://github.com/ljharb/shell-quote/commit/4763c36274c5881a2d141ce9f2b17b7d1d95e8cd)
+- [eslint] add eslint [`6ee1437`](https://github.com/ljharb/shell-quote/commit/6ee1437df1b10a79bdf2aaa04f2bacc9f420dc15)
+- [readme] rename, add badges [`7eb5134`](https://github.com/ljharb/shell-quote/commit/7eb513483d931602452ec572ed456714148acd2b)
+- [meta] update URLs [`67381b6`](https://github.com/ljharb/shell-quote/commit/67381b61fa95e57819333463f491428747893186)
+- [meta] create FUNDING.yml; add `funding` in package.json [`8641572`](https://github.com/ljharb/shell-quote/commit/86415722d875578adf1f95f9e649ba42c805bc32)
+- [meta] use `npmignore` to autogenerate an npmignore file [`2e2007a`](https://github.com/ljharb/shell-quote/commit/2e2007a393f90bf079fc556a921120b3508c4fc3)
+- Only apps should have lockfiles [`f97411e`](https://github.com/ljharb/shell-quote/commit/f97411ef4d2f183200fc8a28beca9faf9b08a640)
+- [Dev Deps] update `tape` [`051f608`](https://github.com/ljharb/shell-quote/commit/051f60857ad5035280208abdc348bf5ba42a6254)
+- [meta] add `safe-publish-latest` [`18cadf9`](https://github.com/ljharb/shell-quote/commit/18cadf95357392fcd78ea8619956fd41eed62649)
+- [Tests] add `aud` in `posttest` [`dc1cc12`](https://github.com/ljharb/shell-quote/commit/dc1cc12b956ccd93d58aaaad263bee7d50576d27)
+
 <!-- auto-changelog-above -->
 
 ## 1.7.3
