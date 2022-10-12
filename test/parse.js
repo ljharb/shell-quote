@@ -14,7 +14,7 @@ test('parse shell commands', function (t) {
 	t.same(parse('echo "foo = \\"foo\\""'), ['echo', 'foo = "foo"']);
 	t.same(parse(''), []);
 	t.same(parse(' '), []);
-	t.same(parse("\t"), []);
+	t.same(parse('\t'), []);
 	t.same(parse('a"b c d"e'), ['ab c de']);
 	t.same(parse('a\\ b"c d"\\ e f'), ['a bc d e', 'f']);
 	t.same(parse('a\\ b"c d"\\ e\'f g\' h'), ['a bc d ef g', 'h']);

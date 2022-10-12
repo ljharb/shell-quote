@@ -3,6 +3,14 @@
 var test = require('tape');
 var parse = require('../').parse;
 
+function getEnv() {
+	return 'xxx';
+}
+
+function getEnvObj() {
+	return { op: '@@' };
+}
+
 test('functional env expansion', function (t) {
 	t.plan(4);
 
@@ -10,12 +18,4 @@ test('functional env expansion', function (t) {
 	t.same(parse('a $XYZ c', getEnvObj), ['a', { op: '@@' }, 'c']);
 	t.same(parse('a${XYZ}c', getEnvObj), ['a', { op: '@@' }, 'c']);
 	t.same(parse('"a $XYZ c"', getEnvObj), ['a ', { op: '@@' }, ' c']);
-
-	function getEnv() {
-		return 'xxx';
-	}
-
-	function getEnvObj() {
-		return { op: '@@' };
-	}
 });
