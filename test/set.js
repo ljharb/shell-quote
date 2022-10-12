@@ -1,3 +1,5 @@
+'use strict';
+
 var test = require('tape');
 var parse = require('../').parse;
 
@@ -19,11 +21,11 @@ test('set env vars', function (t) {
         [ 'X=7 8 9', { op: ';' }, 'printx' ]
     );
     t.same(
-        parse('X="7 8 9"; printx', function (key) {
+        parse('X="7 8 9"; printx', function () {
             t.fail('should not have matched any keys');
         }),
         [ 'X=7 8 9', { op: ';' }, 'printx' ]
     );
-    
+
     t.end();
 });

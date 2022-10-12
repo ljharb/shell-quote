@@ -1,3 +1,5 @@
+'use strict';
+
 exports.quote = function (xs) {
     return xs.map(function (s) {
         if (s && typeof s === 'object') {

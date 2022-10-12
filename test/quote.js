@@ -1,3 +1,5 @@
+'use strict';
+
 var test = require('tape');
 var quote = require('../').quote;
 
@@ -34,15 +36,15 @@ test('quote ops', function (t) {
 });
 
 test('quote windows paths', { skip: 'breaking change, disabled until 2.x' }, function (t) {
-    var path = 'C:\\projects\\node-shell-quote\\index.js'
+    var path = 'C:\\projects\\node-shell-quote\\index.js';
 
-    t.equal(quote([path, 'b', 'c d']), 'C:\\projects\\node-shell-quote\\index.js b \'c d\'')
+    t.equal(quote([path, 'b', 'c d']), 'C:\\projects\\node-shell-quote\\index.js b \'c d\'');
 
-    t.end()
-})
+    t.end();
+});
 
 test("chars for windows paths don't break out", function (t) {
-    var x = '`:\\a\\b'
-    t.equal(quote([x]), '\\`\\:\\\\a\\\\b')
-    t.end()
-})
+    var x = '`:\\a\\b';
+    t.equal(quote([x]), '\\`\\:\\\\a\\\\b');
+    t.end();
+});
