@@ -7,6 +7,9 @@
 		"email": "mail@substack.net",
 		"url": "http://substack.net"
 	},
+	"funding": {
+		"url": "https://github.com/sponsors/ljharb"
+	},
 	"bugs": "https://github.com/ljharb/shell-quote/issues",
 	"devDependencies": {
 		"@ljharb/eslint-config": "^21.0.0",
