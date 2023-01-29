@@ -3,7 +3,7 @@
 // '<(' is process substitution operator and
 // can be parsed the same as control operator
 var CONTROL = '(?:' + [
-	'\\|\\|', '\\&\\&', ';;', '\\|\\&', '\\<\\(', '>>', '>\\&', '<\\&', '[&;()|<>]'
+	'\\|\\|', '\\&\\&', ';;', '\\|\\&', '\\<\\(', '\\<\\<\\<', '>>', '>\\&', '<\\&', '[&;()|<>]'
 ].join('|') + ')';
 var META = '|&;()<> \\t';
 var BAREWORD = '(\\\\[\'"' + META + ']|[^\\s\'"' + META + '])+';

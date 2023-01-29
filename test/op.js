@@ -82,6 +82,15 @@ test('duplicating input file descriptors', function (t) {
 	t.end();
 });
 
+test('here strings', function (t) {
+	t.same(parse('cat <<< "hello world"'), ['cat', { op: '<<<' }, 'hello world']);
+	t.same(parse('cat <<< hello'), ['cat', { op: '<<<' }, 'hello']);
+	t.same(parse('cat<<<hello'), ['cat', { op: '<<<' }, 'hello']);
+	t.same(parse('cat<<<"hello world"'), ['cat', { op: '<<<' }, 'hello world']);
+
+	t.end();
+});
+
 test('glob patterns', function (t) {
 	t.same(
 		parse('tap test/*.test.js'),
