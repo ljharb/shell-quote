@@ -57,9 +57,9 @@ jobs:
         NPM_CONFIG_STRICT_SSL: false
       if: matrix.os == 'windows-latest'
 
-    - run: npm run tests-only
+    - run: ./node_modules/.bin/tape 'test/**/*.js'
     - uses: codecov/codecov-action@v3
-  
+
   nonlatest:
     needs: [matrix, latest]
     name: 'non-latest majors'
@@ -97,7 +97,7 @@ jobs:
         NPM_CONFIG_STRICT_SSL: false
       if: matrix.os == 'windows-latest'
 
-    - run: npm run tests-only
+    - run: ./node_modules/.bin/tape 'test/**/*.js'
     - uses: codecov/codecov-action@v3
 
   node:
