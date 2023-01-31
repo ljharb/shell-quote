@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.8.0](https://github.com/ljharb/shell-quote/compare/v1.7.4...v1.8.0) - 2023-01-30
+
+### Commits
+
+- [New] extract `parse` and `quote` to their own deep imports [`553fdfc`](https://github.com/ljharb/shell-quote/commit/553fdfc32cc41b4c2f77e061b6957703958ca575)
+- [Tests] add `nyc` coverage [`fd7ddcd`](https://github.com/ljharb/shell-quote/commit/fd7ddcdd84bfef064c6d9a06b055a95531b26897)
+- [New] Add support for here strings (`&lt;&lt;&lt;`) [`9802fb3`](https://github.com/ljharb/shell-quote/commit/9802fb37c7946e18c672b81122520dc296bde271)
+- [New] `parse`: Add syntax support for duplicating input file descriptors [`216b198`](https://github.com/ljharb/shell-quote/commit/216b19894f76b14d164c4c5a68f05a51b06336c4)
+- [Dev Deps] update `@ljharb/eslint-config`, `aud`, `tape` [`85f8e31`](https://github.com/ljharb/shell-quote/commit/85f8e31dd80e1dde63d58204b653e497a53857e6)
+- [Tests] add `evalmd` [`c5549fc`](https://github.com/ljharb/shell-quote/commit/c5549fcd82d70046bdc2b1c34184ae9f9d0191f9)
+- [actions] update checkout action [`62e9b49`](https://github.com/ljharb/shell-quote/commit/62e9b4958cfa2f9009b7069076612fe33528c1fb)
+
 ## [v1.7.4](https://github.com/ljharb/shell-quote/compare/1.7.3...v1.7.4) - 2022-10-12
 
 ### Merged
