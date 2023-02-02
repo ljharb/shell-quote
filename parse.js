@@ -5,15 +5,23 @@
 var CONTROL = '(?:' + [
 	'\\|\\|', '\\&\\&', ';;', '\\|\\&', '\\<\\(', '\\<\\<\\<', '>>', '>\\&', '<\\&', '[&;()|<>]'
 ].join('|') + ')';
+var controlRE = new RegExp('^' + CONTROL + '$');
 var META = '|&;()<> \\t';
 var BAREWORD = '(\\\\[\'"' + META + ']|[^\\s\'"' + META + '])+';
 var SINGLE_QUOTE = '"((\\\\"|[^"])*?)"';
 var DOUBLE_QUOTE = '\'((\\\\\'|[^\'])*?)\'';
+var hash = /^#$/;
+
+var SQ = "'";
+var DQ = '"';
+var DS = '$';
 
 var TOKEN = '';
+var mult = Math.pow(16, 8);
 for (var i = 0; i < 4; i++) {
-	TOKEN += (Math.pow(16, 8) * Math.random()).toString(16);
+	TOKEN += (mult * Math.random()).toString(16);
 }
+var startsWithToken = new RegExp('^' + TOKEN);
 
 function parseInternal(s, env, opts) {
 	var chunker = new RegExp([
@@ -52,7 +60,7 @@ function parseInternal(s, env, opts) {
 		if (commented) {
 			return void undefined;
 		}
-		if (RegExp('^' + CONTROL + '$').test(s)) {
+		if (controlRE.test(s)) {
 			return { op: s };
 		}
 
@@ -67,9 +75,6 @@ function parseInternal(s, env, opts) {
 		// 4. quote context can switch mid-token if there is no whitespace
 		//     between the two quote contexts (e.g. all'one'"token" parses as
 		//     "allonetoken")
-		var SQ = "'";
-		var DQ = '"';
-		var DS = '$';
 		var BS = opts.escape || '\\';
 		var quote = false;
 		var esc = false;
@@ -137,9 +142,9 @@ function parseInternal(s, env, opts) {
 				}
 			} else if (c === DQ || c === SQ) {
 				quote = c;
-			} else if (RegExp('^' + CONTROL + '$').test(c)) {
+			} else if (controlRE.test(c)) {
 				return { op: s };
-			} else if ((/^#$/).test(c)) {
+			} else if (hash.test(c)) {
 				commented = true;
 				if (out.length) {
 					return [out, { comment: s.slice(i + 1) + match.slice(j + 1).join(' ') }];
@@ -160,10 +165,7 @@ function parseInternal(s, env, opts) {
 
 		return out;
 	}).reduce(function (prev, arg) { // finalize parsed aruments
-		if (arg === undefined) {
-			return prev;
-		}
-		return prev.concat(arg);
+		return typeof arg === 'undefined' ? prev : prev.concat(arg);
 	}, []);
 }
 
@@ -181,7 +183,7 @@ module.exports = function parse(s, env, opts) {
 			return acc.concat(xs[0]);
 		}
 		return acc.concat(xs.filter(Boolean).map(function (x) {
-			if (RegExp('^' + TOKEN).test(x)) {
+			if (startsWithToken.test(x)) {
 				return JSON.parse(x.split(TOKEN)[1]);
 			}
 			return x;
