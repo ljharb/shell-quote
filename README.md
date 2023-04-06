@@ -57,14 +57,14 @@ output
 
 ``` js
 var parse = require('shell-quote/parse');
-var xs = parse('beep --boop="$PWD"', { PWD: '/home/robot' }, { escape: '^' });
+var xs = parse('beep ^--boop="$PWD"', { PWD: '/home/robot' }, { escape: '^' });
 console.dir(xs);
 ```
 
 output
 
 ```
-[ 'beep', '--boop=/home/robot' ]
+[ 'beep --boop=/home/robot' ]
 ```
 
 ## parsing shell operators

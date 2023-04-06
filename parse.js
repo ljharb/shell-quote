@@ -7,7 +7,6 @@ var CONTROL = '(?:' + [
 ].join('|') + ')';
 var controlRE = new RegExp('^' + CONTROL + '$');
 var META = '|&;()<> \\t';
-var BAREWORD = '(\\\\[\'"' + META + ']|[^\\s\'"' + META + '])+';
 var SINGLE_QUOTE = '"((\\\\"|[^"])*?)"';
 var DOUBLE_QUOTE = '\'((\\\\\'|[^\'])*?)\'';
 var hash = /^#$/;
@@ -24,6 +23,12 @@ for (var i = 0; i < 4; i++) {
 var startsWithToken = new RegExp('^' + TOKEN);
 
 function parseInternal(s, env, opts) {
+	if (!opts) {
+		opts = {};
+	}
+	var BS = opts.escape || '\\';
+	var BAREWORD = '(\\' + BS + '[\'"' + META + ']|[^\\s\'"' + META + '])+';
+
 	var chunker = new RegExp([
 		'(' + CONTROL + ')', // control chars
 		'(' + BAREWORD + '|' + SINGLE_QUOTE + '|' + DOUBLE_QUOTE + ')*'
@@ -35,9 +40,6 @@ function parseInternal(s, env, opts) {
 	}
 	if (!env) {
 		env = {};
-	}
-	if (!opts) {
-		opts = {};
 	}
 
 	var commented = false;
@@ -75,7 +77,6 @@ function parseInternal(s, env, opts) {
 		// 4. quote context can switch mid-token if there is no whitespace
 		//     between the two quote contexts (e.g. all'one'"token" parses as
 		//     "allonetoken")
-		var BS = opts.escape || '\\';
 		var quote = false;
 		var esc = false;
 		var out = '';
