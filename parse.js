@@ -49,6 +49,20 @@ function matchAll(s, r) {
 	return matches;
 }
 
+function getVar(env, pre, key) {
+	var r = typeof env === 'function' ? env(key) : env[key];
+	if (typeof r === 'undefined' && key != '') {
+		r = '';
+	} else if (typeof r === 'undefined') {
+		r = '$';
+	}
+
+	if (typeof r === 'object') {
+		return pre + TOKEN + JSON.stringify(r) + TOKEN;
+	}
+	return pre + r;
+}
+
 function parseInternal(string, env, opts) {
 	if (!opts) {
 		opts = {};
@@ -71,20 +85,6 @@ function parseInternal(string, env, opts) {
 	}
 
 	var commented = false;
-
-	function getVar(_, pre, key) {
-		var r = typeof env === 'function' ? env(key) : env[key];
-		if (r === undefined && key != '') {
-			r = '';
-		} else if (r === undefined) {
-			r = '$';
-		}
-
-		if (typeof r === 'object') {
-			return pre + TOKEN + JSON.stringify(r) + TOKEN;
-		}
-		return pre + r;
-	}
 
 	return matches.map(function (match) {
 		var s = match[0];
@@ -143,7 +143,7 @@ function parseInternal(string, env, opts) {
 					i += varend.index - 1;
 				}
 			}
-			return getVar(null, '', varname);
+			return getVar(env, '', varname);
 		}
 
 		for (i = 0; i < s.length; i++) {
