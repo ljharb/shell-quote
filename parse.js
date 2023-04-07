@@ -31,7 +31,7 @@ for (var i = 0; i < 4; i++) {
 }
 var startsWithToken = new RegExp('^' + TOKEN);
 
-function parseInternal(s, env, opts) {
+function parseInternal(string, env, opts) {
 	if (!opts) {
 		opts = {};
 	}
@@ -43,7 +43,7 @@ function parseInternal(s, env, opts) {
 		'(' + BAREWORD + '|' + SINGLE_QUOTE + '|' + DOUBLE_QUOTE + ')+'
 	].join('|'), 'g');
 
-	var matches = s.match(chunker);
+	var matches = string.match(chunker);
 
 	if (!matches) {
 		return [];
