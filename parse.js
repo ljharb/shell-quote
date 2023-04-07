@@ -31,6 +31,24 @@ for (var i = 0; i < 4; i++) {
 }
 var startsWithToken = new RegExp('^' + TOKEN);
 
+function matchAll(s, r) {
+	var origIndex = r.lastIndex;
+
+	var matches = [];
+	var matchObj;
+
+	while ((matchObj = r.exec(s))) {
+		matches.push(matchObj);
+		if (r.lastIndex === matchObj.index) {
+			r.lastIndex += 1;
+		}
+	}
+
+	r.lastIndex = origIndex;
+
+	return matches;
+}
+
 function parseInternal(string, env, opts) {
 	if (!opts) {
 		opts = {};
@@ -43,9 +61,9 @@ function parseInternal(string, env, opts) {
 		'(' + BAREWORD + '|' + SINGLE_QUOTE + '|' + DOUBLE_QUOTE + ')+'
 	].join('|'), 'g');
 
-	var matches = string.match(chunker);
+	var matches = matchAll(string, chunker);
 
-	if (!matches) {
+	if (matches.length === 0) {
 		return [];
 	}
 	if (!env) {
@@ -68,8 +86,9 @@ function parseInternal(string, env, opts) {
 		return pre + r;
 	}
 
-	return matches.filter(Boolean).map(function (s, j, match) {
-		if (commented) {
+	return matches.map(function (match) {
+		var s = match[0];
+		if (!s || commented) {
 			return void undefined;
 		}
 		if (controlRE.test(s)) {
@@ -157,7 +176,7 @@ function parseInternal(string, env, opts) {
 				return { op: s };
 			} else if (hash.test(c)) {
 				commented = true;
-				var commentObj = { comment: s.slice(i + 1) + match.slice(j + 1).join(' ') };
+				var commentObj = { comment: string.slice(match.index + i + 1) };
 				if (out.length) {
 					return [out, commentObj];
 				}
@@ -177,6 +196,7 @@ function parseInternal(string, env, opts) {
 
 		return out;
 	}).reduce(function (prev, arg) { // finalize parsed arguments
+		// TODO: replace this whole reduce with a concat
 		return typeof arg === 'undefined' ? prev : prev.concat(arg);
 	}, []);
 }

@@ -24,5 +24,8 @@ test('parse shell commands', function (t) {
 	t.same(parse("x bl^'a^'h'", {}, { escape: '^' }), ['x', "bl'a'h"]);
 	t.same(parse('abcH def', {}, { escape: 'H' }), ['abc def']);
 
+	t.deepEqual(parse('# abc  def  ghi'), [{ comment: ' abc  def  ghi' }], 'start-of-line comment content is unparsed');
+	t.deepEqual(parse('xyz # abc  def  ghi'), ['xyz', { comment: ' abc  def  ghi' }], 'comment content is unparsed');
+
 	t.end();
 });
