@@ -6,6 +6,17 @@ var parse = require('../').parse;
 test('parse shell commands', function (t) {
 	t.same(parse(''), [], 'parses an empty string');
 
+	t['throws'](
+		function () { parse('${}'); },
+		Error,
+		'empty substitution throws'
+	);
+	t['throws'](
+		function () { parse('${'); },
+		Error,
+		'incomplete substitution throws'
+	);
+
 	t.same(parse('a \'b\' "c"'), ['a', 'b', 'c']);
 	t.same(
 		parse('beep "boop" \'foo bar baz\' "it\'s \\"so\\" groovy"'),
