@@ -116,28 +116,30 @@ function parseInternal(string, env, opts) {
 			i += 1;
 			var varend;
 			var varname;
-			// debugger
-			if (s.charAt(i) === '{') {
+			var char = s.charAt(i);
+
+			if (char === '{') {
 				i += 1;
 				if (s.charAt(i) === '}') {
-					throw new Error('Bad substitution: ' + s.substr(i - 2, 3));
+					throw new Error('Bad substitution: ' + s.slice(i - 2, i + 1));
 				}
 				varend = s.indexOf('}', i);
 				if (varend < 0) {
-					throw new Error('Bad substitution: ' + s.substr(i));
+					throw new Error('Bad substitution: ' + s.slice(i));
 				}
-				varname = s.substr(i, varend - i);
+				varname = s.slice(i, varend);
 				i = varend;
-			} else if ((/[*@#?$!_-]/).test(s.charAt(i))) {
-				varname = s.charAt(i);
+			} else if ((/[*@#?$!_-]/).test(char)) {
+				varname = char;
 				i += 1;
 			} else {
-				varend = s.substr(i).match(/[^\w\d_]/);
+				var slicedFromI = s.slice(i);
+				varend = slicedFromI.match(/[^\w\d_]/);
 				if (!varend) {
-					varname = s.substr(i);
+					varname = slicedFromI;
 					i = s.length;
 				} else {
-					varname = s.substr(i, varend.index);
+					varname = slicedFromI.slice(0, varend.index);
 					i += varend.index - 1;
 				}
 			}
