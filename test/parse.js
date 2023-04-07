@@ -27,5 +27,8 @@ test('parse shell commands', function (t) {
 	t.deepEqual(parse('# abc  def  ghi'), [{ comment: ' abc  def  ghi' }], 'start-of-line comment content is unparsed');
 	t.deepEqual(parse('xyz # abc  def  ghi'), ['xyz', { comment: ' abc  def  ghi' }], 'comment content is unparsed');
 
+	t.deepEqual(parse('test a b "$T"', { T: 'c d' }), ['test', 'a', 'b', 'c d'], 'quoted env var is not expanded');
+	t.deepEqual(parse('test a b $T', { T: 'c d' }), ['test', 'a', 'b', 'c', 'd'], 'unquoted env var is expanded');
+
 	t.end();
 });

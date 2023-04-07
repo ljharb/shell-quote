@@ -184,7 +184,9 @@ function parseInternal(string, env, opts) {
 			} else if (c === BS) {
 				esc = true;
 			} else if (c === DS) {
-				out += parseEnvVar();
+				var envVar = parseEnvVar();
+				console.log({ envVar }, 'unquoted', parseInternal(envVar, {}, opts));
+				out += envVar;
 			} else {
 				out += c;
 			}
