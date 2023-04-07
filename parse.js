@@ -3,7 +3,16 @@
 // '<(' is process substitution operator and
 // can be parsed the same as control operator
 var CONTROL = '(?:' + [
-	'\\|\\|', '\\&\\&', ';;', '\\|\\&', '\\<\\(', '\\<\\<\\<', '>>', '>\\&', '<\\&', '[&;()|<>]'
+	'\\|\\|',
+	'\\&\\&',
+	';;',
+	'\\|\\&',
+	'\\<\\(',
+	'\\<\\<\\<',
+	'>>',
+	'>\\&',
+	'<\\&',
+	'[&;()|<>]'
 ].join('|') + ')';
 var controlRE = new RegExp('^' + CONTROL + '$');
 var META = '|&;()<> \\t';
@@ -148,10 +157,11 @@ function parseInternal(s, env, opts) {
 				return { op: s };
 			} else if (hash.test(c)) {
 				commented = true;
+				var commentObj = { comment: s.slice(i + 1) + match.slice(j + 1).join(' ') };
 				if (out.length) {
-					return [out, { comment: s.slice(i + 1) + match.slice(j + 1).join(' ') }];
+					return [out, commentObj];
 				}
-				return [{ comment: s.slice(i + 1) + match.slice(j + 1).join(' ') }];
+				return [commentObj];
 			} else if (c === BS) {
 				esc = true;
 			} else if (c === DS) {
@@ -166,7 +176,7 @@ function parseInternal(s, env, opts) {
 		}
 
 		return out;
-	}).reduce(function (prev, arg) { // finalize parsed aruments
+	}).reduce(function (prev, arg) { // finalize parsed arguments
 		return typeof arg === 'undefined' ? prev : prev.concat(arg);
 	}, []);
 }
