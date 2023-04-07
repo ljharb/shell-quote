@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.8.1](https://github.com/ljharb/shell-quote/compare/v1.8.0...v1.8.1) - 2023-04-07
+
+### Fixed
+
+- [Fix] `parse`: preserve whitespace in comments [`#6`](https://github.com/ljharb/shell-quote/issues/6)
+- [Fix] properly support the `escape` option [`#5`](https://github.com/ljharb/shell-quote/issues/5)
+
+### Commits
+
+- [Refactor] `parse`: hoist `getVar` to module level [`b42ac73`](https://github.com/ljharb/shell-quote/commit/b42ac73e39e566cfc355a4addc4bd2df2652556c)
+- [Refactor] hoist some vars to module level [`8f0c5c3`](https://github.com/ljharb/shell-quote/commit/8f0c5c3c9df3a10e32f1972636675af6fffef998)
+- [Refactor] `parse`: use `slice` over `substr`, cache some values [`fcb2e1a`](https://github.com/ljharb/shell-quote/commit/fcb2e1acd5312a1a1a4e6c66ec688aab383023b5)
+- [Refactor] `parse`: a bit of cleanup [`6780ec5`](https://github.com/ljharb/shell-quote/commit/6780ec5194e36e2a696bfbaaf85169682a333321)
+- [Refactor] `parse`: tweak the regex to not match nothing [`227d474`](https://github.com/ljharb/shell-quote/commit/227d4742a006e81ec3fde1eee103731a6f7ea920)
+- [Tests] increase coverage [`a66de94`](https://github.com/ljharb/shell-quote/commit/a66de943555e49fbb1b657cbe3c5b2c703ae507d)
+- [Refactor] `parse`: avoid shadowing a function arg [`1d58679`](https://github.com/ljharb/shell-quote/commit/1d5867907ecbf553556fe6ad790b6d6658aedba3)
+
 ## [v1.8.0](https://github.com/ljharb/shell-quote/compare/v1.7.4...v1.8.0) - 2023-01-30
 
 ### Commits
