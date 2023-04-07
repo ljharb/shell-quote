@@ -16,7 +16,7 @@ var DQ = '"';
 var DS = '$';
 
 var TOKEN = '';
-var mult = Math.pow(16, 8);
+var mult = 0x100000000; // Math.pow(16, 8);
 for (var i = 0; i < 4; i++) {
 	TOKEN += (mult * Math.random()).toString(16);
 }
@@ -31,11 +31,12 @@ function parseInternal(s, env, opts) {
 
 	var chunker = new RegExp([
 		'(' + CONTROL + ')', // control chars
-		'(' + BAREWORD + '|' + SINGLE_QUOTE + '|' + DOUBLE_QUOTE + ')*'
+		'(' + BAREWORD + '|' + SINGLE_QUOTE + '|' + DOUBLE_QUOTE + ')+'
 	].join('|'), 'g');
-	var match = s.match(chunker).filter(Boolean);
 
-	if (!match) {
+	var matches = s.match(chunker);
+
+	if (!matches) {
 		return [];
 	}
 	if (!env) {
@@ -58,7 +59,7 @@ function parseInternal(s, env, opts) {
 		return pre + r;
 	}
 
-	return match.map(function (s, j) {
+	return matches.filter(Boolean).map(function (s, j, match) {
 		if (commented) {
 			return void undefined;
 		}

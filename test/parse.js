@@ -4,6 +4,8 @@ var test = require('tape');
 var parse = require('../').parse;
 
 test('parse shell commands', function (t) {
+	t.same(parse(''), [], 'parses an empty string');
+
 	t.same(parse('a \'b\' "c"'), ['a', 'b', 'c']);
 	t.same(
 		parse('beep "boop" \'foo bar baz\' "it\'s \\"so\\" groovy"'),
