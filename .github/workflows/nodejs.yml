@@ -52,6 +52,13 @@ jobs:
         node-version: ${{ matrix.node-version }}
       if: matrix.os == 'windows-latest'
 
+    - name: upgrade npm
+      run: npm install -g npm@6
+      env:
+        NPM_CONFIG_STRICT_SSL: false
+      if: matrix.os == 'windows-latest' && matrix.node-version >= 6 && matrix.node-version <= 9
+      continue-on-error: true
+
     - run: npm install
       env:
         NPM_CONFIG_STRICT_SSL: false
