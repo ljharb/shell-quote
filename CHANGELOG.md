@@ -58,24 +58,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- auto-changelog-above -->
 
-## 1.7.3
+## [v1.7.3](https://github.com/ljharb/shell-quote/compare/v1.7.2...v1.7.3) - 2021-10-20
 * Fix a security issue where the regex for windows drive letters allowed some shell meta-characters
 to escape the quoting rules. (CVE-2021-42740)
 
-## 1.7.2
+## [v1.7.2](https://github.com/ljharb/shell-quote/compare/v1.7.1...v1.7.2) - 2019-08-30
 * Fix a regression introduced in 1.6.3. This reverts the Windows path quoting fix. ([144e1c2](https://github.com/ljharb/shell-quote/commit/144e1c20cd57549a414c827fb3032e60b7b8721c))
 
-## 1.7.1
+## [v1.7.1](https://github.com/ljharb/shell-quote/compare/v1.7.0...v1.7.1) - 2019-08-13
 * Fix `$` being removed when not part of an environment variable name. ([@Adman](https://github.com/Admin) in [#32](https://github.com/ljharb/shell-quote/pull/32))
 
-## 1.7.0
+## [v1.7.0](https://github.com/ljharb/shell-quote/compare/v1.6.3...v1.7.0) - 2019-08-13
 * Add support for parsing `>>` and `>&` redirection operators. ([@forivall](https://github.com/forivall) in [#16](https://github.com/ljharb/shell-quote/pull/16))
 * Add support for parsing `<(` process substitution operator. ([@cuonglm](https://github.com/cuonglm) in [#15](https://github.com/ljharb/shell-quote/pull/15))
 
-## 1.6.3
+## [v1.6.3](https://github.com/ljharb/shell-quote/compare/v1.6.2...v1.6.3) - 2019-08-13
 * Fix Windows path quoting problems. ([@dy](https://github.com/dy) in [#34](https://github.com/ljharb/shell-quote/pull/34))
 
-## [v1.6.2](https://github.com/ljharb/shell-quote/compare/1.6.1...v1.6.2) - 2019-08-13
+## [v1.6.2](https://github.com/ljharb/shell-quote/compare/v1.6.1...v1.6.2) - 2019-08-13
 
 ### Merged
 
@@ -86,32 +86,32 @@ to escape the quoting rules. (CVE-2021-42740)
 - fix whitespace [`72fb5a8`](https://github.com/ljharb/shell-quote/commit/72fb5a8ce29b4f67f28302af33c217b58f92e260)
 - Disable package-lock.json [`d450577`](https://github.com/ljharb/shell-quote/commit/d4505770b2a4251af2da8e177385c5e0456a83b6)
 
-## [1.6.1](https://github.com/ljharb/shell-quote/compare/1.6.0...1.6.1) - 2016-06-17
+## [1.6.1](https://github.com/ljharb/shell-quote/compare/v1.6.0...v1.6.1) - 2016-06-17
 
 ### Commits
 
 - Fix some more escaping for .quote() [`ace52f4`](https://github.com/ljharb/shell-quote/commit/ace52f4c8717b370b301a3db3a4727db26e309ad)
 - Fix escaping for greater than and less than [`70e9eb2`](https://github.com/ljharb/shell-quote/commit/70e9eb2a854eb56a3dfa255be12610a722bbe080)
 
-## [1.6.0](https://github.com/ljharb/shell-quote/compare/1.5.0...1.6.0) - 2016-04-23
+## [1.6.0](https://github.com/ljharb/shell-quote/compare/v1.5.0...v1.6.0) - 2016-04-23
 
 ### Commits
 
 - add comment parsing feature [`b8b5c31`](https://github.com/ljharb/shell-quote/commit/b8b5c31c16a15aa4ab26c8f23d362a24b9fa57c4)
 
-## [1.5.0](https://github.com/ljharb/shell-quote/compare/1.4.3...1.5.0) - 2016-03-16
+## [1.5.0](https://github.com/ljharb/shell-quote/compare/v1.4.3...v1.5.0) - 2016-03-16
 
 ### Commits
 
 - add escape option to .parse [`4d400e7`](https://github.com/ljharb/shell-quote/commit/4d400e773be448c320b6dc9b2eb1323d7a3461ca)
 
-## [1.4.3](https://github.com/ljharb/shell-quote/compare/1.4.2...1.4.3) - 2015-03-07
+## [1.4.3](https://github.com/ljharb/shell-quote/compare/v1.4.2...v1.4.3) - 2015-03-07
 
 ### Commits
 
 - Fix quote() with special chars [`811b5a0`](https://github.com/ljharb/shell-quote/commit/811b5a0aff79f347db245edcf88750977c111844)
 
-## [1.4.2](https://github.com/ljharb/shell-quote/compare/1.4.1...1.4.2) - 2014-07-20
+## [1.4.2](https://github.com/ljharb/shell-quote/compare/v1.4.1...v1.4.2) - 2014-07-20
 
 ### Commits
 
@@ -119,7 +119,7 @@ to escape the quoting rules. (CVE-2021-42740)
 - falseys ok [`22dbd94`](https://github.com/ljharb/shell-quote/commit/22dbd9492c372038d439d6ec08c6288ca5fa3c10)
 - all the falseys test [`c99dca5`](https://github.com/ljharb/shell-quote/commit/c99dca59dca64743877a0411d299ce669f0a2d1d)
 
-## [1.4.1](https://github.com/ljharb/shell-quote/compare/1.4.0...1.4.1) - 2013-12-24
+## [1.4.1](https://github.com/ljharb/shell-quote/compare/v1.4.0...v1.4.1) - 2013-12-24
 
 ### Commits
 
@@ -129,7 +129,7 @@ to escape the quoting rules. (CVE-2021-42740)
 - add testling badge [`44c98b1`](https://github.com/ljharb/shell-quote/commit/44c98b1e341d348ce9b5b4d78bb4d26345e868ea)
 - upgrade tape [`3fc22d3`](https://github.com/ljharb/shell-quote/commit/3fc22d3d38592e6fc3b3308cc73a282d641bad34)
 
-## [1.4.0](https://github.com/ljharb/shell-quote/compare/1.3.3...1.4.0) - 2013-10-17
+## [1.4.0](https://github.com/ljharb/shell-quote/compare/v1.3.3...v1.4.0) - 2013-10-17
 
 ### Merged
 
@@ -143,14 +143,14 @@ to escape the quoting rules. (CVE-2021-42740)
 - Fix test case for backslash in double quotes [`89bc550`](https://github.com/ljharb/shell-quote/commit/89bc5500711643e87fe93dd1bde0e8745c34d733)
 - Add failing tests for crazy quoting tricks [`58a5e48`](https://github.com/ljharb/shell-quote/commit/58a5e4800a62fdc3e980feae1e6c6b15c812f0cb)
 
-## [1.3.3](https://github.com/ljharb/shell-quote/compare/1.3.2...1.3.3) - 2013-06-24
+## [1.3.3](https://github.com/ljharb/shell-quote/compare/v1.3.2...v1.3.3) - 2013-06-24
 
 ### Commits
 
 - failing set test with an env cb [`9fb2096`](https://github.com/ljharb/shell-quote/commit/9fb20968b407c590745a982d2a562960e952142d)
 - remove the broken special case [`f9a0ee5`](https://github.com/ljharb/shell-quote/commit/f9a0ee574f9d5e5d5b382f55da960c23eb7d44c5)
 
-## [1.3.2](https://github.com/ljharb/shell-quote/compare/1.3.1...1.3.2) - 2013-06-24
+## [1.3.2](https://github.com/ljharb/shell-quote/compare/v1.3.1...v1.3.2) - 2013-06-24
 
 ### Commits
 
@@ -165,13 +165,13 @@ to escape the quoting rules. (CVE-2021-42740)
 - failing test for quoted whitespace and nested quotes [`9a4c11c`](https://github.com/ljharb/shell-quote/commit/9a4c11cba0f61762aaa7887591d78fe7e965cf65)
 - failing test for quotes embedded inside barewords [`d997384`](https://github.com/ljharb/shell-quote/commit/d997384018ce107ab8e12aa5b8d8359c2f77128b)
 
-## [1.3.1](https://github.com/ljharb/shell-quote/compare/1.3.0...1.3.1) - 2013-05-13
+## [1.3.1](https://github.com/ljharb/shell-quote/compare/v1.3.0...v1.3.1) - 2013-05-13
 
 ### Commits
 
 - pass objects through [`f9c0514`](https://github.com/ljharb/shell-quote/commit/f9c0514abbdf8ba16fafb68736863d14b39015ef)
 
-## [1.3.0](https://github.com/ljharb/shell-quote/compare/1.2.0...1.3.0) - 2013-05-13
+## [1.3.0](https://github.com/ljharb/shell-quote/compare/v1.2.0...v1.3.0) - 2013-05-13
 
 ### Commits
 
@@ -184,7 +184,7 @@ to escape the quoting rules. (CVE-2021-42740)
 - env() objects even work inside quote strings [`16139f5`](https://github.com/ljharb/shell-quote/commit/16139f52bf7a2beb7e1ca9b61b93a9ea598b0f1a)
 - another check just to make sure env() works [`914a1a9`](https://github.com/ljharb/shell-quote/commit/914a1a9ec55cd76bedfed4086c35866733128036)
 
-## [1.2.0](https://github.com/ljharb/shell-quote/compare/1.1.0...1.2.0) - 2013-05-13
+## [1.2.0](https://github.com/ljharb/shell-quote/compare/v1.1.0...v1.2.0) - 2013-05-13
 
 ### Commits
 
@@ -192,7 +192,7 @@ to escape the quoting rules. (CVE-2021-42740)
 - add the special vars to the replace regex but the chunker breaks on them [`d1ff82a`](https://github.com/ljharb/shell-quote/commit/d1ff82a07c44cb53ab909b61833296f38257eabd)
 - fixed the env test, everything is fine [`a45897f`](https://github.com/ljharb/shell-quote/commit/a45897f53ba184a77bc762c63777b95590a83962)
 
-## [1.1.0](https://github.com/ljharb/shell-quote/compare/1.0.0...1.1.0) - 2013-05-13
+## [1.1.0](https://github.com/ljharb/shell-quote/compare/v1.0.0...v1.1.0) - 2013-05-13
 
 ### Commits
 
@@ -200,7 +200,7 @@ to escape the quoting rules. (CVE-2021-42740)
 - test for parsed ops objects in quote() [`59fb71b`](https://github.com/ljharb/shell-quote/commit/59fb71b39c53b83306d015bec62fc93667745f75)
 - another test for op object quoting [`5819a31`](https://github.com/ljharb/shell-quote/commit/5819a31a19c34967dcb7bd1719250ed2aa480583)
 
-## [1.0.0](https://github.com/ljharb/shell-quote/compare/0.1.1...1.0.0) - 2013-05-13
+## [1.0.0](https://github.com/ljharb/shell-quote/compare/0.1.1...v1.0.0) - 2013-05-13
 
 ### Commits
 
