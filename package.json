@@ -61,7 +61,9 @@
 	},
 	"publishConfig": {
 		"ignore": [
-			".github/workflows"
+			".github/workflows",
+			"example",
+			"CHANGELOG.md"
 		]
 	}
 }
