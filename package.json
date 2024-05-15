@@ -65,5 +65,8 @@
 			"example",
 			"CHANGELOG.md"
 		]
+	},
+	"engines": {
+		"node": ">= 0.4"
 	}
 }
