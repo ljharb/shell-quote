@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.8.2](https://github.com/ljharb/shell-quote/compare/v1.8.1...v1.8.2) - 2024-11-27
+
+### Fixed
+
+- [Fix] `quote`: preserve empty strings [`#18`](https://github.com/ljharb/shell-quote/issues/18)
+
+### Commits
+
+- [meta] fix changelog tags [`0fb9fd8`](https://github.com/ljharb/shell-quote/commit/0fb9fd8441aa06f7de995e90ce85bd9e758f5f05)
+- [actions] split out node 10-20, and 20+ [`819bd84`](https://github.com/ljharb/shell-quote/commit/819bd842e0b01f3e5041834ab82bad299851de08)
+- [Dev Deps] update `@ljharb/eslint-config`, `auto-changelog`, `npmignore`, `tape` [`fc56408`](https://github.com/ljharb/shell-quote/commit/fc564086c83317363908b55f6c744ad35983ccca)
+- [actions] update npm for windows tests [`fdeb0fd`](https://github.com/ljharb/shell-quote/commit/fdeb0fd102ecdd4ff227a978532598c462312347)
+- [Dev Deps] update `@ljharb/eslint-config`, `aud`, `tape` [`b8a4a3b`](https://github.com/ljharb/shell-quote/commit/b8a4a3b3f5ae3ca8ae86b89ed0030e4e3358ef3c)
+- [actions] prevent node 14 on ARM mac from failing [`9eecafc`](https://github.com/ljharb/shell-quote/commit/9eecafc0486c9321be223415cf3fb76a5bd07dda)
+- [meta] exclude more files from the package [`4044e7f`](https://github.com/ljharb/shell-quote/commit/4044e7fad4a45e696602060b69b31a95702bee28)
+- [Tests] replace `aud` with `npm audit` [`8cfdbd8`](https://github.com/ljharb/shell-quote/commit/8cfdbd8ec30e653f9f99348e59117ed4a789e1ba)
+- [meta] add missing `engines.node` [`843820e`](https://github.com/ljharb/shell-quote/commit/843820e1a46cebcf10d8e48c4d82d0ab5a7b0194)
+- [Dev Deps] add missing peer dep [`4c3b88d`](https://github.com/ljharb/shell-quote/commit/4c3b88d7925d29e9cc1ac76ccde05f4e714ede96)
+- [Dev Deps] pin `jackspeak` since 2.1.2+ depends on npm aliases, which kill the install process in npm &lt; 6 [`80322ed`](https://github.com/ljharb/shell-quote/commit/80322ed5914a5922d9507946490fbabcc96e624b)
+
 ## [v1.8.1](https://github.com/ljharb/shell-quote/compare/v1.8.0...v1.8.1) - 2023-04-07
 
 ### Fixed
@@ -34,7 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Tests] add `evalmd` [`c5549fc`](https://github.com/ljharb/shell-quote/commit/c5549fcd82d70046bdc2b1c34184ae9f9d0191f9)
 - [actions] update checkout action [`62e9b49`](https://github.com/ljharb/shell-quote/commit/62e9b4958cfa2f9009b7069076612fe33528c1fb)
 
-## [v1.7.4](https://github.com/ljharb/shell-quote/compare/1.7.3...v1.7.4) - 2022-10-12
+## [v1.7.4](https://github.com/ljharb/shell-quote/compare/v1.7.3...v1.7.4) - 2022-10-12
 
 ### Merged
 
