@@ -48,3 +48,9 @@ test("chars for windows paths don't break out", function (t) {
 	t.equal(quote([x]), '\\`\\:\\\\a\\\\b');
 	t.end();
 });
+
+test('empty strings', function (t) {
+	t.equal(quote(['-x', '', 'y']), '-x \'\' y');
+
+	t.end();
+});

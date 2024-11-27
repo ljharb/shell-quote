@@ -38,5 +38,7 @@ test('parse shell commands', function (t) {
 	t.deepEqual(parse('# abc  def  ghi'), [{ comment: ' abc  def  ghi' }], 'start-of-line comment content is unparsed');
 	t.deepEqual(parse('xyz # abc  def  ghi'), ['xyz', { comment: ' abc  def  ghi' }], 'comment content is unparsed');
 
+	t.deepEqual(parse('-x "" -y'), ['-x', '', '-y'], 'empty string is preserved');
+
 	t.end();
 });
