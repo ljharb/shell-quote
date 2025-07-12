@@ -12,7 +12,7 @@
 	},
 	"bugs": "https://github.com/ljharb/shell-quote/issues",
 	"devDependencies": {
-		"@ljharb/eslint-config": "^21.1.1",
+		"@ljharb/eslint-config": "^21.2.0",
 		"auto-changelog": "^2.5.0",
 		"encoding": "^0.1.13",
 		"eslint": "=8.8.0",
