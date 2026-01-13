@@ -157,5 +157,5 @@ MIT
 [downloads-url]: https://npm-stat.com/charts.html?package=shell-quote
 [codecov-image]: https://codecov.io/gh/ljharb/shell-quote/branch/main/graphs/badge.svg
 [codecov-url]: https://app.codecov.io/gh/ljharb/shell-quote/
-[actions-image]: https://img.shields.io/endpoint?url=https://github-actions-badge-u3jn4tfpocch.runkit.sh/ljharb/shell-quote
+[actions-image]: https://img.shields.io/github/check-runs/ljharb/shell-quote/main
 [actions-url]: https://github.com/ljharb/shell-quote/actions
