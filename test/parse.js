@@ -40,5 +40,11 @@ test('parse shell commands', function (t) {
 
 	t.deepEqual(parse('-x "" -y'), ['-x', '', '-y'], 'empty string is preserved');
 
+	t.same(
+		parse('2;b', {}, { escape: 'd' }),
+		[{ op: '2;b' }],
+		'control char in unquoted context mid-token with regex-special escape returns op'
+	);
+
 	t.end();
 });
