@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.8.4](https://github.com/ljharb/shell-quote/compare/v1.8.3...v1.8.4) - 2026-05-22
+
+### Commits
+
+- [Fix] `quote`: validate object-token shapes [`4378a6e`](https://github.com/ljharb/shell-quote/commit/4378a6e613db5948168684864e49b42b83134d2d)
+- [Dev Deps] update `@ljharb/eslint-config`, `auto-changelog`, `eslint`, `npmignore` [`22ebec0`](https://github.com/ljharb/shell-quote/commit/22ebec04349065a45ad8afc8cc8d53c4624634a6)
+- [Tests] increase coverage [`9f3caa3`](https://github.com/ljharb/shell-quote/commit/9f3caa31900cc6ee64858b31134144c648ce206d)
+- [readme] replace runkit CI badge with shields.io check-runs badge [`3344a04`](https://github.com/ljharb/shell-quote/commit/3344a047dd1e95f71c4ca27522cbfd05c56277e0)
+- [Dev Deps] update `@ljharb/eslint-config` [`699c511`](https://github.com/ljharb/shell-quote/commit/699c5113d135f4d4591574bebf173334ffa453d4)
+
 ## [v1.8.3](https://github.com/ljharb/shell-quote/compare/v1.8.2...v1.8.3) - 2025-06-01
 
 ### Fixed
