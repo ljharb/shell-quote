@@ -57,27 +57,25 @@ jobs:
       if: matrix.os == 'windows-latest'
 
     - name: upgrade npm
-      run: |
-        for i in 1 2 3; do npm install -g npm@6 && exit 0 || sleep 5; done
-      shell: bash
+      run: npm install -g npm@6
       env:
         NPM_CONFIG_STRICT_SSL: false
       if: matrix.os == 'windows-latest' && matrix.node-version >= 6 && matrix.node-version <= 9
       continue-on-error: true
 
-    - name: npm install (retry; npm 2/3 staging-rename flake on Windows)
+    - name: 'npm install (Windows + node 4/6/7: drop eslint first; npm 2/3 cannot stage eslint''s nested @types/estree, and eslint is not run in this job)'
       run: |
-        for i in 1 2 3; do
-          npm install && exit 0
-          echo "::warning::npm install attempt $i failed; cleaning node_modules and retrying"
-          rm -rf node_modules
-          sleep 10
-        done
-        exit 1
+        node -e "var fs=require('fs'); var p=JSON.parse(fs.readFileSync('package.json','utf8')); delete p.devDependencies.eslint; delete p.devDependencies['@ljharb/eslint-config']; delete p.devDependencies.jiti; fs.writeFileSync('package.json',JSON.stringify(p,null,2));"
+        npm install
       shell: bash
       env:
         NPM_CONFIG_STRICT_SSL: false
-      if: matrix.os == 'windows-latest'
+      if: ${{ matrix.os == 'windows-latest' && (matrix.node-version == '4' || matrix.node-version == '6' || matrix.node-version == '7') }}
+
+    - run: npm install
+      env:
+        NPM_CONFIG_STRICT_SSL: false
+      if: ${{ matrix.os == 'windows-latest' && matrix.node-version != '4' && matrix.node-version != '6' && matrix.node-version != '7' }}
 
     - run: ./node_modules/.bin/tape 'test/**/*.js'
     - uses: codecov/codecov-action@v3
@@ -114,16 +112,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
       if: matrix.os == 'windows-latest'
 
-    - name: npm install (retry; npm 2/3 staging-rename flake on Windows)
-      run: |
-        for i in 1 2 3; do
-          npm install && exit 0
-          echo "::warning::npm install attempt $i failed; cleaning node_modules and retrying"
-          rm -rf node_modules
-          sleep 10
-        done
-        exit 1
-      shell: bash
+    - run: npm install
       env:
         NPM_CONFIG_STRICT_SSL: false
       if: matrix.os == 'windows-latest'
