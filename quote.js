@@ -1,6 +1,9 @@
 'use strict';
 
-var OPS = [
+/** @import { ControlOperator } from './parse' */
+
+/** @type {ControlOperator['op'][]} */
+var OPS = /** @type {const} */ ([
 	'||',
 	'&&',
 	';;',
@@ -17,17 +20,18 @@ var OPS = [
 	'|',
 	'<',
 	'>'
-];
+]);
 var LINE_TERMINATORS = /[\n\r\u2028\u2029]/;
 var GLOB_SHELL_SPECIAL = /[\s#!"$&'():;<=>@\\^`|]/g;
 
+/** @type {import('./quote')} */
 module.exports = function quote(xs) {
 	return xs.map(function (s) {
 		if (s === '') {
-			return '\'\'';
+			return /** @type {const} */ ('\'\'');
 		}
 		if (s && typeof s === 'object') {
-			if (s.op === 'glob') {
+			if ('op' in s && s.op === 'glob') {
 				if (typeof s.pattern !== 'string') {
 					throw new TypeError('glob token requires a string `pattern`');
 				}
@@ -36,13 +40,13 @@ module.exports = function quote(xs) {
 				}
 				return s.pattern.replace(GLOB_SHELL_SPECIAL, '\\$&');
 			}
-			if (typeof s.op === 'string') {
+			if ('op' in s && typeof s.op === 'string') {
 				if (OPS.indexOf(s.op) < 0) {
 					throw new TypeError('invalid `op` value: ' + JSON.stringify(s.op));
 				}
 				return s.op.replace(/[\s\S]/g, '\\$&');
 			}
-			if (typeof s.comment === 'string') {
+			if ('comment' in s && typeof s.comment === 'string') {
 				if (LINE_TERMINATORS.test(s.comment)) {
 					throw new TypeError('`comment` must not contain line terminators');
 				}

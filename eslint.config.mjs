@@ -12,6 +12,7 @@ export default [
 			'max-lines-per-function': 'off',
 			'max-statements': 'off',
 			'multiline-comment-style': 'off',
+			'no-extra-parens': 'off',
 			'no-lonely-if': 'warn',
 			'no-negated-condition': 'warn',
 			'no-param-reassign': 'warn',

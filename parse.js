@@ -1,8 +1,16 @@
 'use strict';
 
+/**
+ * @import {
+ * 	ControlOperator,
+ * 	Env,
+ * 	GlobPattern,
+ * 	ParseEntry,
+ * } from './parse' */
+
 // '<(' is process substitution operator and
 // can be parsed the same as control operator
-var CONTROL = '(?:' + [
+var CONTROL = /** @type {const} */ ('(?:') + /** @type {const} */ ([
 	'\\|\\|',
 	'\\&\\&',
 	';;',
@@ -13,24 +21,28 @@ var CONTROL = '(?:' + [
 	'>\\&',
 	'<\\&',
 	'[&;()|<>]'
-].join('|') + ')';
+]).join(/** @type {const} */ ('|')) + /** @type {const} */ (')');
 var controlRE = new RegExp('^' + CONTROL + '$');
-var META = '|&;()<> \\t';
-var SINGLE_QUOTE = '"((\\\\"|[^"])*?)"';
-var DOUBLE_QUOTE = '\'((\\\\\'|[^\'])*?)\'';
+var META = /** @type {const} */ ('|&;()<> \\t');
+var SINGLE_QUOTE = /** @type {const} */ ('"((\\\\"|[^"])*?)"');
+var DOUBLE_QUOTE = /** @type {const} */ ('\'((\\\\\'|[^\'])*?)\'');
 var hash = /^#$/;
 
-var SQ = "'";
-var DQ = '"';
-var DS = '$';
+var SQ = /** @type {const} */ ("'");
+var DQ = /** @type {const} */ ('"');
+var DS = /** @type {const} */ ('$');
 
 var TOKEN = '';
-var mult = 0x100000000; // Math.pow(16, 8);
+var mult = /** @type {const} */ (0x100000000); // Math.pow(16, 8);
 for (var i = 0; i < 4; i++) {
 	TOKEN += (mult * Math.random()).toString(16);
 }
 var startsWithToken = new RegExp('^' + TOKEN);
 
+/**
+ * @param {string} s
+ * @param {RegExp} r
+ */
 function matchAll(s, r) {
 	var origIndex = r.lastIndex;
 
@@ -49,6 +61,11 @@ function matchAll(s, r) {
 	return matches;
 }
 
+/**
+ * @param {Env} env
+ * @param {string} pre
+ * @param {string} key
+ */
 function getVar(env, pre, key) {
 	var r = typeof env === 'function' ? env(key) : env[key];
 	if (typeof r === 'undefined' && key != '') {
@@ -63,6 +80,12 @@ function getVar(env, pre, key) {
 	return pre + r;
 }
 
+/**
+ * @param {string} string
+ * @param {Env} [env]
+ * @param {{ escape?: string }} [opts]
+ * @returns {ParseEntry[]}
+ */
 function parseInternal(string, env, opts) {
 	if (!opts) {
 		opts = {};
@@ -92,7 +115,7 @@ function parseInternal(string, env, opts) {
 			return void undefined;
 		}
 		if (controlRE.test(s)) {
-			return { op: s };
+			return /** @type {ControlOperator} */ ({ op: s });
 		}
 
 		// Hand-written scanner/parser for Bash quoting rules:
@@ -106,15 +129,19 @@ function parseInternal(string, env, opts) {
 		// 4. quote context can switch mid-token if there is no whitespace
 		//     between the two quote contexts (e.g. all'one'"token" parses as
 		//     "allonetoken")
+		/** @type {string | boolean} */
 		var quote = false;
 		var esc = false;
 		var out = '';
 		var isGlob = false;
+		/** @type {number} */
 		var i;
 
 		function parseEnvVar() {
 			i += 1;
+			/** @type {number | RegExpMatchArray | null} */
 			var varend;
+			/** @type {string} */
 			var varname;
 			var char = s.charAt(i);
 
@@ -140,10 +167,10 @@ function parseInternal(string, env, opts) {
 					i = s.length;
 				} else {
 					varname = slicedFromI.slice(0, varend.index);
-					i += varend.index - 1;
+					i += /** @type {number} */ (varend.index) - 1;
 				}
 			}
-			return getVar(env, '', varname);
+			return getVar(/** @type {NonNullable<typeof env>} */ (env), '', varname);
 		}
 
 		for (i = 0; i < s.length; i++) {
@@ -175,14 +202,14 @@ function parseInternal(string, env, opts) {
 			} else if (c === DQ || c === SQ) {
 				quote = c;
 			} else if (controlRE.test(c)) {
-				return { op: s };
+				return /** @type {ControlOperator} */ ({ op: s });
 			} else if (hash.test(c)) {
 				commented = true;
 				var commentObj = { comment: string.slice(match.index + i + 1) };
 				if (out.length) {
-					return [out, commentObj];
+					return /** @type {const} */ ([out, commentObj]);
 				}
-				return [commentObj];
+				return /** @type {const} */ ([commentObj]);
 			} else if (c === BS) {
 				esc = true;
 			} else if (c === DS) {
@@ -193,16 +220,17 @@ function parseInternal(string, env, opts) {
 		}
 
 		if (isGlob) {
-			return { op: 'glob', pattern: out };
+			return /** @type {GlobPattern} */ ({ op: 'glob', pattern: out });
 		}
 
 		return out;
 	}).reduce(function (prev, arg) { // finalize parsed arguments
 		// TODO: replace this whole reduce with a concat
 		return typeof arg === 'undefined' ? prev : prev.concat(arg);
-	}, []);
+	}, /** @type {ParseEntry[]} */ ([]));
 }
 
+/** @type {import('./parse')} */
 module.exports = function parse(s, env, opts) {
 	var mapped = parseInternal(s, env, opts);
 	if (typeof env !== 'function') {
@@ -222,5 +250,5 @@ module.exports = function parse(s, env, opts) {
 			}
 			return x;
 		}));
-	}, []);
+	}, /** @type {ParseEntry[]} */ ([]));
 };
