@@ -48,3 +48,20 @@ test('parse shell commands', function (t) {
 
 	t.end();
 });
+
+test('parse stays linear in token count (GHSA-395f-4hp3-45gv)', function (t) {
+	// the old concat-in-reduce finalizer was O(n^2): this many tokens took
+	// ~minutes, so under the unfixed code this test hangs rather than passes
+	var n = 2e5;
+	var input = new Array(n + 1).join('x '); // avoid String#repeat for old engines
+
+	var words = parse(input);
+	t.equal(words.length, n, 'every token is returned');
+	t.equal(words[0], 'x', 'first token is correct');
+	t.equal(words[n - 1], 'x', 'last token is correct');
+
+	var withEnv = parse(input, function () { return 'v'; });
+	t.equal(withEnv.length, n, 'env-function path returns every token');
+
+	t.end();
+});
