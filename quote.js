@@ -60,6 +60,6 @@ module.exports = function quote(xs) {
 		if ((/["'\s]/).test(s)) {
 			return '"' + s.replace(/(["\\$`!])/g, '\\$1') + '"';
 		}
-		return String(s).replace(/([A-Za-z]:)?([#!"$&'()*,:;<=>?@[\\\]^`{|}])/g, '$1\\$2');
+		return String(s).replace(/([A-Za-z]:)?([#!"$&'()*,:;<=>?@[\\\]^`{|}~])/g, '$1\\$2');
 	}).join(' ');
 };

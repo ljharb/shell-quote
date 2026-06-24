@@ -30,6 +30,18 @@ test('quote', function (t) {
 	t.end();
 });
 
+test('quote tilde (escapes leading ~ to prevent shell tilde-expansion)', function (t) {
+	t.equal(quote(['~']), '\\~');
+	t.equal(quote(['~/foo']), '\\~/foo');
+	t.equal(quote(['~root']), '\\~root');
+	t.equal(quote(['~root/x']), '\\~root/x');
+	t.equal(quote(['~+']), '\\~+');
+	t.equal(quote(['~-']), '\\~-');
+	t.equal(quote(['a~b']), 'a\\~b');
+	t.equal(quote(['x~']), 'x\\~');
+	t.end();
+});
+
 test('quote ops', function (t) {
 	t.equal(quote(['a', { op: '|' }, 'b']), 'a \\| b');
 	t.equal(
