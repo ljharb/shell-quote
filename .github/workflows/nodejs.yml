@@ -50,6 +50,22 @@ jobs:
         skip-ls-check: true
       if: matrix.os != 'windows-latest'
 
+    # node 7's bundled npm 4.2.0 can neither self-upgrade (`Cannot read
+    # property 'path' of null`) nor TLS-handshake with the current registry
+    # (EPROTO); node 5 segfaults in the `prepublish` lifecycle. Deps are pure
+    # JS, so a modern Node installs them; the target Node only runs the tests.
+    - name: 'install deps with modern Node (Windows + node 5/7)'
+      uses: actions/setup-node@v3
+      with:
+        node-version: 22
+      if: ${{ matrix.os == 'windows-latest' && (matrix.node-version == '5' || matrix.node-version == '7') }}
+
+    - name: 'npm install --ignore-scripts (Windows + node 5/7)'
+      run: npm install --ignore-scripts
+      env:
+        NPM_CONFIG_STRICT_SSL: false
+      if: ${{ matrix.os == 'windows-latest' && (matrix.node-version == '5' || matrix.node-version == '7') }}
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -60,22 +76,22 @@ jobs:
       run: npm install -g npm@6
       env:
         NPM_CONFIG_STRICT_SSL: false
-      if: matrix.os == 'windows-latest' && matrix.node-version >= 6 && matrix.node-version <= 9
+      if: matrix.os == 'windows-latest' && matrix.node-version >= 6 && matrix.node-version <= 9 && matrix.node-version != '7'
       continue-on-error: true
 
-    - name: 'npm install (Windows + node 4/6/7: drop eslint first; npm 2/3 cannot stage eslint''s nested @types/estree, and eslint is not run in this job)'
+    - name: 'npm install (Windows + node 4/6: drop eslint first; npm 2/3 cannot stage eslint''s nested @types/estree, and eslint is not run in this job)'
       run: |
         node -e "var fs=require('fs'); var p=JSON.parse(fs.readFileSync('package.json','utf8')); delete p.devDependencies.eslint; delete p.devDependencies['@ljharb/eslint-config']; delete p.devDependencies.jiti; fs.writeFileSync('package.json',JSON.stringify(p,null,2));"
         npm install
       shell: bash
       env:
         NPM_CONFIG_STRICT_SSL: false
-      if: ${{ matrix.os == 'windows-latest' && (matrix.node-version == '4' || matrix.node-version == '6' || matrix.node-version == '7') }}
+      if: ${{ matrix.os == 'windows-latest' && (matrix.node-version == '4' || matrix.node-version == '6') }}
 
     - run: npm install
       env:
         NPM_CONFIG_STRICT_SSL: false
-      if: ${{ matrix.os == 'windows-latest' && matrix.node-version != '4' && matrix.node-version != '6' && matrix.node-version != '7' }}
+      if: ${{ matrix.os == 'windows-latest' && matrix.node-version != '4' && matrix.node-version != '5' && matrix.node-version != '6' && matrix.node-version != '7' }}
 
     - run: ./node_modules/.bin/tape 'test/**/*.js'
     - uses: codecov/codecov-action@v3
