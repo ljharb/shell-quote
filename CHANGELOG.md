@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.9.0](https://github.com/ljharb/shell-quote/compare/v1.8.4...v1.9.0) - 2026-06-24
+
+### Commits
+
+- [New] add types [`dca6e21`](https://github.com/ljharb/shell-quote/commit/dca6e21a02df4cc1a83ed1b5baa4d82df134170a)
+- [Dev Deps] update `eslint` [`9aa9e8f`](https://github.com/ljharb/shell-quote/commit/9aa9e8f60991f8c4053a29e476795d891ff851ad)
+- [Fix] `parse`: finalize tokens in linear time (GHSA-395f-4hp3-45gv) [`7ff5488`](https://github.com/ljharb/shell-quote/commit/7ff5488599d01c323514f02f5efb74088dd134ec)
+- [actions] update workflows [`75e8497`](https://github.com/ljharb/shell-quote/commit/75e849741ffaf2d3aa53ae0e18ef6bf9929ef478)
+- [actions] Windows + node 4/6/7: pin eslint to 9 before install, since npm 2/3 cannot stage eslint 10`@types/esrecurse` [`3fb739d`](https://github.com/ljharb/shell-quote/commit/3fb739de44b81c69431947d54fbfc18998dd6d72)
+- [actions] retry `npm install` on Windows to survive npm 2/3 staging-rename flake [`abe0163`](https://github.com/ljharb/shell-quote/commit/abe0163293c82963fa8a16cfaa87181846d5aced)
+- [actions] Windows + node 5/7: install deps with a modern node [`b4bafa2`](https://github.com/ljharb/shell-quote/commit/b4bafa2e7e58d53d9839b1c24976f61e54b43326)
+- [Fix] `quote`: escape leading `~` to prevent shell tilde-expansion [`7a76c1a`](https://github.com/ljharb/shell-quote/commit/7a76c1a12d8461c2234a1c655b943cee84cbff91)
+- [Dev Deps] update `auto-changelog`, `tape` [`7184b44`](https://github.com/ljharb/shell-quote/commit/7184b4458b65c17b931e126d8cb5f586c6717dc8)
+- [Dev Deps] apparently `jackspeak` is no longer in the graph [`9ba368a`](https://github.com/ljharb/shell-quote/commit/9ba368a4057b9f498b0fef23b5b15543ef81b98c)
+
 ## [v1.8.4](https://github.com/ljharb/shell-quote/compare/v1.8.3...v1.8.4) - 2026-05-22
 
 ### Commits
