@@ -25,7 +25,7 @@ var CONTROL = /** @type {const} */ ('(?:') + /** @type {const} */ ([
 var controlRE = new RegExp('^' + CONTROL + '$');
 var META = /** @type {const} */ ('|&;()<> \\t');
 var SINGLE_QUOTE = /** @type {const} */ ('"((\\\\"|[^"])*?)"');
-var DOUBLE_QUOTE = /** @type {const} */ ('\'((\\\\\'|[^\'])*?)\'');
+var DOUBLE_QUOTE = /** @type {const} */ ('\'([^\']*?)\'');
 var hash = /^#$/;
 
 var SQ = /** @type {const} */ ("'");
