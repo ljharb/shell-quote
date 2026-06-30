@@ -2,6 +2,7 @@
 
 var test = require('tape');
 var parse = require('../').parse;
+var quote = require('../').quote;
 
 test('parse shell commands', function (t) {
 	t.same(parse(''), [], 'parses an empty string');
@@ -32,6 +33,12 @@ test('parse shell commands', function (t) {
 	t.same(parse('a\\ b"c d"\\ e f'), ['a bc d e', 'f']);
 	t.same(parse('a\\ b"c d"\\ e\'f g\' h'), ['a bc d ef g', 'h']);
 	t.same(parse("x \"bl'a\"'h'"), ['x', "bl'ah"]);
+
+	// inside single quotes everything is literal, so a backslash does not escape
+	// the closing quote and a quoted token must end at its first closing quote
+	t.same(parse("'\\' '\\'"), ['\\', '\\'], 'single-quoted backslashes parse as two separate tokens');
+	t.same(parse("'\\'\\''"), ["\\'"], 'single-quoted backslash joined with an escaped quote');
+	t.same(parse(quote(['\\', '\\'])), ['\\', '\\'], 'quote/parse round-trips a pair of backslashes');
 	t.same(parse("x bl^'a^'h'", {}, { escape: '^' }), ['x', "bl'a'h"]);
 	t.same(parse('abcH def', {}, { escape: 'H' }), ['abc def']);
 
