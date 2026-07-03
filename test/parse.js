@@ -49,6 +49,27 @@ test('parse shell commands', function (t) {
 	t.end();
 });
 
+test('single quotes are literal', function (t) {
+	t.same(parse("'\\'\\'"), ["\\'"], 'close-escape-reopen produces a quote after a quoted backslash');
+	t.same(parse("'a'\\''b'"), ["a'b"], 'close-escape-reopen embeds a quote mid-word');
+	t.same(parse("'\\'x"), ['\\x'], 'bareword joins a preceding quoted backslash');
+	t.same(parse("a'\\'b"), ['a\\b'], 'quoted backslash joins surrounding barewords');
+	t.same(parse("''"), [''], 'empty single quotes produce an empty token');
+	t.same(parse("''a''"), ['a'], 'empty single quotes join adjacent content');
+	t.same(parse("'*'"), ['*'], 'quoted glob char is a plain string, not a glob');
+
+	t.end();
+});
+
+test('unmatched single quotes', function (t) {
+	// real shells reject unterminated quotes; parse is lenient, and these pin the shape of that leniency
+	t.same(parse("'"), [], 'a lone quote is dropped');
+	t.same(parse("'a"), ['a'], 'an unterminated quote keeps its content');
+	t.same(parse("a'b"), ['a', 'b'], 'an unmatched quote mid-word splits the token');
+
+	t.end();
+});
+
 test('parse stays linear in token count (GHSA-395f-4hp3-45gv)', function (t) {
 	// the old concat-in-reduce finalizer was O(n^2): this many tokens took
 	// ~minutes, so under the unfixed code this test hangs rather than passes
