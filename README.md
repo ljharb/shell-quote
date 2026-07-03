@@ -13,7 +13,7 @@ Parse and quote shell commands.
 
 ## quote
 
-``` js
+```js
 var quote = require('shell-quote/quote');
 var s = quote([ 'a', 'b c d', '$f', '"g"' ]);
 console.log(s);
@@ -27,7 +27,7 @@ a 'b c d' \$f '"g"'
 
 ## parse
 
-``` js
+```js
 var parse = require('shell-quote/parse');
 var xs = parse('a "b c" \\$def \'it\'\\\'\'s great\'');
 console.dir(xs);
@@ -41,7 +41,7 @@ output
 
 ## parse with an environment variable
 
-``` js
+```js
 var parse = require('shell-quote/parse');
 var xs = parse('beep --boop="$PWD"', { PWD: '/home/robot' });
 console.dir(xs);
@@ -55,7 +55,7 @@ output
 
 ## parse with custom escape character
 
-``` js
+```js
 var parse = require('shell-quote/parse');
 var xs = parse('beep ^--boop="$PWD"', { PWD: '/home/robot' }, { escape: '^' });
 console.dir(xs);
@@ -69,7 +69,7 @@ output
 
 ## parsing shell operators
 
-``` js
+```js
 var parse = require('shell-quote/parse');
 var xs = parse('beep || boop > /byte');
 console.dir(xs);
@@ -83,7 +83,7 @@ output:
 
 ## parsing shell comment
 
-``` js
+```js
 var parse = require('shell-quote/parse');
 var xs = parse('beep > boop # > kaboom');
 console.dir(xs);
@@ -97,7 +97,7 @@ output:
 
 # methods
 
-``` js
+```js
 var quote = require('shell-quote/quote');
 var parse = require('shell-quote/parse');
 ```
