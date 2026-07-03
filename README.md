@@ -29,14 +29,14 @@ a 'b c d' \$f '"g"'
 
 ``` js
 var parse = require('shell-quote/parse');
-var xs = parse('a "b c" \\$def \'it\\\'s great\'');
+var xs = parse('a "b c" \\$def \'it\'\\\'\'s great\'');
 console.dir(xs);
 ```
 
 output
 
 ```
-[ 'a', 'b c', '\\$def', 'it\'s great' ]
+[ 'a', 'b c', '$def', "it's great" ]
 ```
 
 ## parse with an environment variable
@@ -64,7 +64,7 @@ console.dir(xs);
 output
 
 ```
-[ 'beep --boop=/home/robot' ]
+[ 'beep', '--boop=/home/robot' ]
 ```
 
 ## parsing shell operators
@@ -92,7 +92,7 @@ console.dir(xs);
 output:
 
 ```
-[ 'beep', { op: '>' }, 'boop', { comment: '> kaboom' } ]
+[ 'beep', { op: '>' }, 'boop', { comment: ' > kaboom' } ]
 ```
 
 # methods
