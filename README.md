@@ -131,6 +131,15 @@ Return an array of arguments from the quoted string `cmd`.
 Interpolate embedded bash-style `$VARNAME` and `${VARNAME}` variables with
 the `env` object which like bash will replace undefined variables with `""`.
 
+Only simple `$VARNAME` and `${VARNAME}` interpolation is supported.
+Bash parameter expansion beyond a plain variable name is not evaluated:
+forms such as array subscripts (`${arr[i]}`), length (`${#arr[@]}`),
+and modifiers (`${var:-default}`, `${var/a/b}`)
+are treated as an unknown variable and expand to `""`,
+while arithmetic (`$((...))`) and command substitution (`$(...)`)
+are not interpreted.
+Whitespace inside `${...}` throws a `Bad substitution` error.
+
 `env` is usually an object but it can also be a function to perform lookups.
 When `env(key)` returns a string, its result will be output just like `env[key]`
 would. When `env(key)` returns an object, it will be inserted into the result
