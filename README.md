@@ -114,6 +114,16 @@ Each entry of `args` may be a string, or one of the object shapes that
 other object shape, an unrecognized `op`, or a `pattern`/`comment`
 containing line terminators throws a `TypeError`.
 
+The output is POSIX shell (`sh`/`bash`) quoting.
+It is not valid for Windows `cmd.exe` or PowerShell,
+whose rules differ and, for `cmd.exe`,
+are not solvable in the general case. On Windows,
+do not build a shell command string from this output;
+instead pass an argument array to a non-shell API such as
+`child_process.execFile` or `spawn`
+(or the `cross-spawn` package),
+which does no shell parsing and needs no quoting.
+
 ## parse(cmd, env={})
 
 Return an array of arguments from the quoted string `cmd`.
