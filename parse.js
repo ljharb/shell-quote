@@ -24,8 +24,8 @@ var CONTROL = /** @type {const} */ ('(?:') + /** @type {const} */ ([
 ]).join(/** @type {const} */ ('|')) + /** @type {const} */ (')');
 var controlRE = new RegExp('^' + CONTROL + '$');
 var META = /** @type {const} */ ('|&;()<> \\t');
-var SINGLE_QUOTE = /** @type {const} */ ('"((\\\\"|[^"])*?)"');
-var DOUBLE_QUOTE = /** @type {const} */ ('\'([^\']*?)\'');
+var SINGLE_QUOTE = /** @type {const} */ ('\'([^\']*?)\'');
+var DOUBLE_QUOTE = /** @type {const} */ ('"((\\\\"|[^"])*?)"');
 var hash = /^#$/;
 
 var SQ = /** @type {const} */ ("'");
@@ -95,7 +95,7 @@ function parseInternal(string, env, opts) {
 
 	var chunker = new RegExp([
 		'(' + CONTROL + ')', // control chars
-		'(' + BAREWORD + '|' + SINGLE_QUOTE + '|' + DOUBLE_QUOTE + ')+'
+		'(' + BAREWORD + '|' + DOUBLE_QUOTE + '|' + SINGLE_QUOTE + ')+'
 	].join('|'), 'g');
 
 	var matches = matchAll(string, chunker);
