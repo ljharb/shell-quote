@@ -124,6 +124,12 @@ instead pass an argument array to a non-shell API such as
 (or the `cross-spawn` package),
 which does no shell parsing and needs no quoting.
 
+Use the returned string verbatim as shell input.
+It is already a complete, escaped shell word (or words);
+do not wrap it in additional quotes or embed it in `eval '...'`.
+Re-quoting the output (for example, placing it inside single quotes)
+turns its backslash escapes into literal characters and corrupts the value.
+
 ## parse(cmd, env={})
 
 Return an array of arguments from the quoted string `cmd`.
