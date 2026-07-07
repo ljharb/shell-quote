@@ -42,6 +42,16 @@ test('quote tilde (escapes leading ~ to prevent shell tilde-expansion)', functio
 	t.end();
 });
 
+test('escapes shell-special characters conservatively (issue #11)', function (t) {
+	t.equal(quote(['make', 'CFLAGS=-DRELEASE']), 'make CFLAGS\\=-DRELEASE', 'escapes = so a leading word is not read as an assignment');
+	t.equal(quote(['a@b']), 'a\\@b', 'escapes @ (zsh globbing)');
+	t.equal(quote(['a^b']), 'a\\^b', 'escapes ^ (zsh extendedglob, csh)');
+	t.equal(quote(['a:b']), 'a\\:b', 'escapes :');
+	t.equal(quote(['a,b']), 'a\\,b', 'escapes , (brace expansion)');
+	t.equal(quote(['a!b']), 'a\\!b', 'escapes ! (history expansion / pipeline negation)');
+	t.end();
+});
+
 test('quote ops', function (t) {
 	t.equal(quote(['a', { op: '|' }, 'b']), 'a \\| b');
 	t.equal(
