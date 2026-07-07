@@ -150,10 +150,21 @@ function parseInternal(string, env, opts) {
 				if (s.charAt(i) === '}') {
 					throw new Error('Bad substitution: ' + s.slice(i - 2, i + 1));
 				}
-				varend = s.indexOf('}', i);
-				if (varend < 0) {
+				// match braces by depth so a nested `${` keeps its inner `}` from ending the outer substitution
+				var depth = 1;
+				varend = i;
+				while (depth > 0 && varend < s.length) {
+					if (s.charAt(varend) === '{' && s.charAt(varend - 1) === '$') {
+						depth += 1;
+					} else if (s.charAt(varend) === '}') {
+						depth -= 1;
+					}
+					varend += 1;
+				}
+				if (depth !== 0) {
 					throw new Error('Bad substitution: ' + s.slice(i));
 				}
+				varend -= 1;
 				varname = s.slice(i, varend);
 				i = varend;
 			} else if ((/[*@#?$!_-]/).test(char)) {

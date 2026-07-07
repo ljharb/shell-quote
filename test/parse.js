@@ -77,6 +77,19 @@ test('unmatched single quotes', function (t) {
 	t.end();
 });
 
+test('nested parameter expansion', function (t) {
+	t.same(parse('${a${b}c}'), [''], 'a nested ${} is consumed as one substitution, not split at the first }');
+	t.same(parse('${a${b}}'), [''], 'a nested ${} at the end is consumed as one substitution');
+	t.same(parse('${foo{bar}'), [''], 'a lone { that is not part of a nested ${} does not change brace depth');
+	t.same(
+		parse('level=${levels[$RANDOM%${#levels[@]}]}'),
+		['level='],
+		'a nested array-index expansion is consumed whole, without leaking a partial token'
+	);
+
+	t.end();
+});
+
 test('parse stays linear in token count (GHSA-395f-4hp3-45gv)', function (t) {
 	// the old concat-in-reduce finalizer was O(n^2): this many tokens took
 	// ~minutes, so under the unfixed code this test hangs rather than passes
