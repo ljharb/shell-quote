@@ -42,6 +42,13 @@ test('quote tilde (escapes leading ~ to prevent shell tilde-expansion)', functio
 	t.end();
 });
 
+test('backslash with whitespace is not doubled in single quotes (#14)', function (t) {
+	t.equal(quote(['foo \\ bar']), "'foo \\ bar'", 'a backslash between spaces stays a single literal backslash');
+	t.equal(quote(['foo \\\\ bar']), "'foo \\\\ bar'", 'a double backslash is preserved, not quadrupled');
+	t.equal(quote(['foo\\\nbar']), "'foo\\\nbar'", 'a backslash before a newline is preserved');
+	t.end();
+});
+
 test('escapes shell-special characters conservatively (issue #11)', function (t) {
 	t.equal(quote(['make', 'CFLAGS=-DRELEASE']), 'make CFLAGS\\=-DRELEASE', 'escapes = so a leading word is not read as an assignment');
 	t.equal(quote(['a@b']), 'a\\@b', 'escapes @ (zsh globbing)');
