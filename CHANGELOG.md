@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.10.0](https://github.com/ljharb/shell-quote/compare/v1.9.0...v1.10.0) - 2026-07-10
+
+### Merged
+
+- [New] `parse`: add opt-in `splitUnquoted` option for shell field-splitting of unquoted expansions [`#1`](https://github.com/ljharb/shell-quote/pull/1)
+
+### Commits
+
+- [Fix] `parse`: match nested `${...}` braces so nested parameter expansion is consumed as one substitution [`c0842c8`](https://github.com/ljharb/shell-quote/commit/c0842c8a7a034066da2496a75e91cbe500ff736c)
+- [Tests] `parse`: pin single-quote literalness and unmatched-quote handling [`a0d03e3`](https://github.com/ljharb/shell-quote/commit/a0d03e35c8ede24016502c4433b8f5d6b3100a62)
+- [readme] remove the space in js code fences so evalmd evaluates them [`2116fa3`](https://github.com/ljharb/shell-quote/commit/2116fa36aeea77fe8d561b0db46b1f9b26b8cf1b)
+- [Tests] `quote`: pin conservative escaping of `=`, `@`, `^`, `,`, `:`, `!` (#11) [`1c36f3f`](https://github.com/ljharb/shell-quote/commit/1c36f3ff77d26d200620c1027e5c271050120b8e)
+- [readme] document that `quote` outputs POSIX quoting, not `cmd.exe`/PowerShell [`100e96e`](https://github.com/ljharb/shell-quote/commit/100e96e0ffadcca97d63dda15651c70b9f83507c)
+- [readme] document `parse`'s supported parameter-expansion subset [`e1c75cd`](https://github.com/ljharb/shell-quote/commit/e1c75cd6e4a3c60003792c7f2802587d328622cb)
+- [Fix] `parse`: a backslash inside single quotes must not escape the closing quote [`5d460a3`](https://github.com/ljharb/shell-quote/commit/5d460a332b54b83153297fe7d1964330b28fa491)
+- [readme] fix stale example outputs [`2de86f5`](https://github.com/ljharb/shell-quote/commit/2de86f5d44f44d3ac9df36413d8a05f3534cdec6)
+- [Tests] `quote`: pin that a backslash with whitespace is not doubled in single quotes (#14) [`190e236`](https://github.com/ljharb/shell-quote/commit/190e236bcf1d81caa8e40e8ea3bb11998575be71)
+- [readme] `quote`: use output verbatim; do not re-quote it (#11) [`1b36468`](https://github.com/ljharb/shell-quote/commit/1b364683b1e9e8d078fd3017cde82cf10c9c04a5)
+- [Refactor] `parse`: fix swapped `SINGLE_QUOTE`/`DOUBLE_QUOTE` variable names [`801af5c`](https://github.com/ljharb/shell-quote/commit/801af5c935b27d6dcda63b3975d5e92a7b6f887f)
+- [types] fix an error TS v6 ignores but v7 fails on [`59bbf8b`](https://github.com/ljharb/shell-quote/commit/59bbf8b81bf3236842deb72805744d489f650eba)
+- [Dev Deps] update `@arethetypeswrong/cli`, `evalmd` [`a04d475`](https://github.com/ljharb/shell-quote/commit/a04d47516e1cd5b1b4d3f720ddf97561ed0082fc)
+- [Dev Deps] update `@arethetypeswrong/ci`, `eslint` [`d390f9a`](https://github.com/ljharb/shell-quote/commit/d390f9a92b97a04b1f799298634e90dc581021e6)
+- [Tests] `quote`: the tilde test escapes every `~`, not just a leading one (#9) [`617d119`](https://github.com/ljharb/shell-quote/commit/617d119795c7b44d6e49a4d41f80195c4aa5735c)
+
 ## [v1.9.0](https://github.com/ljharb/shell-quote/compare/v1.8.4...v1.9.0) - 2026-06-24
 
 ### Commits
