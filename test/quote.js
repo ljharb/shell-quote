@@ -30,7 +30,7 @@ test('quote', function (t) {
 	t.end();
 });
 
-test('quote tilde (escapes leading ~ to prevent shell tilde-expansion)', function (t) {
+test('quote tilde (escapes every ~ to prevent shell tilde-expansion)', function (t) {
 	t.equal(quote(['~']), '\\~');
 	t.equal(quote(['~/foo']), '\\~/foo');
 	t.equal(quote(['~root']), '\\~root');
