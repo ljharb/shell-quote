@@ -40,12 +40,12 @@
 		"postversion": "auto-changelog && git add CHANGELOG.md && git commit --no-edit --amend && git tag -f \"v$(node -e \"console.log(require('./package.json').version)\")\""
 	},
 	"devDependencies": {
-		"@arethetypeswrong/cli": "^0.18.4",
+		"@arethetypeswrong/cli": "^0.18.5",
 		"@ljharb/eslint-config": "^22.2.3",
 		"@ljharb/tsconfig": "^0.3.2",
 		"auto-changelog": "^2.6.0",
 		"eslint": "^10.6.0",
-		"evalmd": "^0.0.19",
+		"evalmd": "^0.0.20",
 		"in-publish": "^2.0.1",
 		"jiti": "^0.0.0",
 		"npmignore": "^0.3.5",
