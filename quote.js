@@ -24,7 +24,7 @@ var OPS = /** @type {const} */ ([
 var LINE_TERMINATORS = /[\n\r\u2028\u2029]/;
 var GLOB_SHELL_SPECIAL = /[\s#!"$&'():;<=>@\\^`|]/g;
 
-/** @type {import('./quote')} */
+/** @type {typeof import('./quote')} */
 module.exports = function quote(xs) {
 	return xs.map(function (s) {
 		if (s === '') {

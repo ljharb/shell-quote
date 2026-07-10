@@ -304,7 +304,7 @@ function parseInternal(string, env, opts) {
 	}, /** @type {ParseEntry[]} */ ([]));
 }
 
-/** @type {import('./parse')} */
+/** @type {typeof import('./parse')} */
 module.exports = function parse(s, env, opts) {
 	var mapped = parseInternal(s, env, opts);
 	if (typeof env !== 'function') {
