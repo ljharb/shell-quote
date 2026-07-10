@@ -67,6 +67,20 @@ output
 [ 'beep', '--boop=/home/robot' ]
 ```
 
+## parse with unquoted variable splitting
+
+```js
+var parse = require('shell-quote/parse');
+var xs = parse('a $T', { T: 'c d' }, { splitUnquoted: true });
+console.dir(xs);
+```
+
+output
+
+```
+[ 'a', 'c', 'd' ]
+```
+
 ## parsing shell operators
 
 ```js
@@ -137,6 +151,13 @@ Return an array of arguments from the quoted string `cmd`.
 Interpolate embedded bash-style `$VARNAME` and `${VARNAME}` variables with
 the `env` object which like bash will replace undefined variables with `""`.
 
+By default an expanded variable is a single token even when unquoted.
+Pass `{ splitUnquoted: true }` to split an unquoted expansion into multiple tokens the way a shell performs field splitting,
+using the default `IFS` (space, tab, newline).
+Pass a string to use its characters as the `IFS` instead
+(for example `{ splitUnquoted: ':' }`).
+A quoted expansion (`"$VAR"`) is never split.
+
 Only simple `$VARNAME` and `${VARNAME}` interpolation is supported.
 Bash parameter expansion beyond a plain variable name is not evaluated:
 forms such as array subscripts (`${arr[i]}`), length (`${#arr[@]}`),
@@ -147,12 +168,13 @@ are not interpreted.
 Whitespace inside `${...}` throws a `Bad substitution` error.
 
 `env` is usually an object but it can also be a function to perform lookups.
-When `env(key)` returns a string, its result will be output just like `env[key]`
-would. When `env(key)` returns an object, it will be inserted into the result
+When `env(key)` returns a string, its result will be output just like `env[key]` would.
+When `env(key)` returns an object, it will be inserted into the result
 array like the operator objects.
 
-When a bash operator is encountered, the element in the array with be an object
-with an `"op"` key set to the operator string. For example:
+When a bash operator is encountered,
+the element in the array with be an object with an `"op"` key set to the operator string.
+For example:
 
 ```
 'beep || boop > /byte'
@@ -180,8 +202,6 @@ MIT
 [npm-version-svg]: https://versionbadg.es/ljharb/shell-quote.svg
 [deps-svg]: https://david-dm.org/ljharb/shell-quote.svg
 [deps-url]: https://david-dm.org/ljharb/shell-quote
-[dev-deps-svg]: https://david-dm.org/ljharb/shell-quote/dev-status.svg
-[dev-deps-url]: https://david-dm.org/ljharb/shell-quote#info=devDependencies
 [npm-badge-png]: https://nodei.co/npm/shell-quote.png?downloads=true&stars=true
 [license-image]: https://img.shields.io/npm/l/shell-quote.svg
 [license-url]: LICENSE

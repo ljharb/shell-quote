@@ -90,6 +90,47 @@ test('nested parameter expansion', function (t) {
 	t.end();
 });
 
+test('splitUnquoted: field-splits unquoted variable expansion (#1)', function (t) {
+	var env = { T: 'c d', E: '', S: '  c   d  ', W: '   ' };
+	var opts = { splitUnquoted: true };
+
+	t.same(parse('test a b $T', env, opts), ['test', 'a', 'b', 'c', 'd'], 'unquoted expansion splits into separate tokens');
+	t.same(parse('a$T', env, opts), ['ac', 'd'], 'the first field joins the preceding text');
+	t.same(parse('$T x', env, opts), ['c', 'd', 'x'], 'the last field is a token of its own');
+	t.same(parse('x${T}y', env, opts), ['xc', 'dy'], 'fields join text on both sides');
+	t.same(parse('$S', env, opts), ['c', 'd'], 'leading, trailing, and repeated whitespace collapses');
+	t.same(parse('a$S', env, opts), ['a', 'c', 'd'], 'leading whitespace closes the preceding field');
+	t.same(parse('$W', env, opts), [], 'an all-whitespace expansion produces no tokens');
+	t.same(parse('a$W b', env, opts), ['a', 'b'], 'an all-whitespace expansion just separates fields');
+	t.same(parse('$E', env, opts), [], 'an empty unquoted expansion produces no token');
+	t.same(parse('"$T"', env, opts), ['c d'], 'a quoted expansion is never split');
+	t.same(parse('-x "" -y', env, opts), ['-x', '', '-y'], 'a quoted empty string is still preserved');
+	t.same(parse('a $F b', function () { return 'c d'; }, opts), ['a', 'c', 'd', 'b'], 'the env-function path splits too');
+
+	t.same(parse('test a b $T', env), ['test', 'a', 'b', 'c d'], 'without the option, unquoted expansion is not split');
+
+	t.end();
+});
+
+test('splitUnquoted: a string value is a custom IFS (#1)', function (t) {
+	function o(ifs) { return { splitUnquoted: ifs }; }
+
+	t.same(parse('${V}', { V: 'a:b' }, o(':')), ['a', 'b'], 'a non-whitespace IFS char splits fields');
+	t.same(parse('${V}', { V: 'a::b' }, o(':')), ['a', '', 'b'], 'adjacent non-whitespace delimiters yield an empty field');
+	t.same(parse('${V}', { V: ':a:' }, o(':')), ['', 'a'], 'a leading delimiter yields a leading empty; a trailing one does not');
+	t.same(parse('${V}', { V: 'a::' }, o(':')), ['a', ''], 'a trailing double delimiter yields one empty field');
+	t.same(parse('${V}', { V: ':' }, o(':')), [''], 'a lone delimiter yields a single empty field');
+	t.same(parse('${V}', { V: '::' }, o(':')), ['', ''], 'two delimiters yield two empty fields');
+	t.same(parse('${V}${W}', { V: 'a:', W: ':b' }, o(':')), ['a', '', 'b'], 'delimiters spanning an expansion boundary merge into one run');
+	t.same(parse('a${V}${W}z', { V: ':x:', W: ':y:' }, o(':')), ['a', 'x', '', 'y', 'z'], 'fields join literal text on both sides across expansions');
+	t.same(parse('${V}', { V: 'a : b' }, o(' :')), ['a', 'b'], 'whitespace around a non-whitespace delimiter is absorbed');
+	t.same(parse('${V}', { V: 'a b:c' }, o(' :')), ['a', 'b', 'c'], 'mixed IFS: whitespace and non-whitespace each delimit');
+	t.same(parse('${V}', { V: 'a,b' }, o(',')), ['a', 'b'], 'any character can be the IFS');
+	t.same(parse('${V}', { V: 'a b' }, o('')), ['a b'], 'an empty IFS string disables splitting');
+
+	t.end();
+});
+
 test('parse stays linear in token count (GHSA-395f-4hp3-45gv)', function (t) {
 	// the old concat-in-reduce finalizer was O(n^2): this many tokens took
 	// ~minutes, so under the unfixed code this test hangs rather than passes

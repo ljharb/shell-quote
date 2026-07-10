@@ -83,7 +83,7 @@ function getVar(env, pre, key) {
 /**
  * @param {string} string
  * @param {Env} [env]
- * @param {{ escape?: string }} [opts]
+ * @param {{ escape?: string, splitUnquoted?: boolean | string }} [opts]
  * @returns {ParseEntry[]}
  */
 function parseInternal(string, env, opts) {
@@ -91,6 +91,7 @@ function parseInternal(string, env, opts) {
 		opts = {};
 	}
 	var BS = opts.escape || '\\';
+	var ifs = opts.splitUnquoted === true ? ' \t\n' : (typeof opts.splitUnquoted === 'string' ? opts.splitUnquoted : '');
 	var BAREWORD = '(\\' + BS + '[\'"' + META + ']|[^\\s\'"' + META + '])+';
 
 	var chunker = new RegExp([
@@ -133,6 +134,11 @@ function parseInternal(string, env, opts) {
 		var quote = false;
 		var esc = false;
 		var out = '';
+		/** @type {string[]} */
+		var words = [];
+		var sawQuote = false;
+		/** @type {number | null} */
+		var pendingNw = null;
 		var isGlob = false;
 		/** @type {number} */
 		var i;
@@ -184,8 +190,30 @@ function parseInternal(string, env, opts) {
 			return getVar(/** @type {NonNullable<typeof env>} */ (env), '', varname);
 		}
 
+		function flushRun() {
+			if (pendingNw === null) {
+				return;
+			}
+			if (pendingNw === 0) {
+				if (out !== '') {
+					words[words.length] = out;
+					out = '';
+				}
+			} else {
+				words[words.length] = out;
+				out = '';
+				for (var fe = 1; fe < pendingNw; fe += 1) {
+					words[words.length] = '';
+				}
+			}
+			pendingNw = null;
+		}
+
 		for (i = 0; i < s.length; i++) {
 			var c = s.charAt(i);
+			if (ifs && c !== DS) {
+				flushRun();
+			}
 			isGlob = isGlob || (!quote && (c === '*' || c === '?'));
 			if (esc) {
 				out += c;
@@ -212,6 +240,7 @@ function parseInternal(string, env, opts) {
 				}
 			} else if (c === DQ || c === SQ) {
 				quote = c;
+				sawQuote = true;
 			} else if (controlRE.test(c)) {
 				return /** @type {ControlOperator} */ ({ op: s });
 			} else if (hash.test(c)) {
@@ -224,7 +253,22 @@ function parseInternal(string, env, opts) {
 			} else if (c === BS) {
 				esc = true;
 			} else if (c === DS) {
-				out += parseEnvVar();
+				var value = parseEnvVar();
+				if (!ifs) {
+					out += value;
+				} else {
+					for (var vi = 0; vi < value.length; vi += 1) {
+						var vc = value.charAt(vi);
+						if (ifs.indexOf(vc) < 0) {
+							flushRun();
+							out += vc;
+						} else if (pendingNw === null) {
+							pendingNw = vc === ' ' || vc === '\t' || vc === '\n' ? 0 : 1;
+						} else if (vc !== ' ' && vc !== '\t' && vc !== '\n') {
+							pendingNw += 1;
+						}
+					}
+				}
 			} else {
 				out += c;
 			}
@@ -232,6 +276,20 @@ function parseInternal(string, env, opts) {
 
 		if (isGlob) {
 			return /** @type {GlobPattern} */ ({ op: 'glob', pattern: out });
+		}
+
+		if (ifs) {
+			if (pendingNw !== null && pendingNw > 0) {
+				words[words.length] = out;
+				out = '';
+				for (var te = 1; te < pendingNw; te += 1) {
+					words[words.length] = '';
+				}
+			}
+			if (out !== '' || (sawQuote && words.length === 0)) {
+				words[words.length] = out;
+			}
+			return words;
 		}
 
 		return out;

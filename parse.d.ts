@@ -22,6 +22,8 @@ declare namespace parse {
 	export interface ParseOptions {
 		/** Custom escape character. Defaults to `\\`. */
 		escape?: string;
+		/** Field-splits an unquoted variable expansion, the way a shell does using `IFS`; quoted expansions are never split. `true` uses the default IFS (space, tab, newline); a string uses its characters as the IFS. An empty string, `false`, or omitting the option disables splitting. Defaults to false. */
+		splitUnquoted?: boolean | string;
 	}
 
 	export type Env =
