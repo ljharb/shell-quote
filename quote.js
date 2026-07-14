@@ -22,7 +22,7 @@ var OPS = /** @type {const} */ ([
 	'>'
 ]);
 var LINE_TERMINATORS = /[\n\r\u2028\u2029]/;
-var GLOB_SHELL_SPECIAL = /[\s#!"$&'():;<=>@\\^`|]/g;
+var GLOB_SHELL_SPECIAL = /[\s#!"$&'():;<=>@\\^`|~]/g;
 
 /** @type {typeof import('./quote')} */
 module.exports = function quote(xs) {

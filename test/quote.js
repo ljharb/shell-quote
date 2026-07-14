@@ -128,6 +128,16 @@ test('quote glob pattern', function (t) {
 	t.end();
 });
 
+test('quote glob tilde (escapes every ~ to prevent shell tilde-expansion)', function (t) {
+	t.equal(quote([{ op: 'glob', pattern: '~/*.txt' }]), '\\~/*.txt', 'glob metas still pass through');
+	t.equal(quote([{ op: 'glob', pattern: '~root/.bashr*' }]), '\\~root/.bashr*');
+	t.equal(quote([{ op: 'glob', pattern: '~+/*' }]), '\\~+/*');
+	t.equal(quote([{ op: 'glob', pattern: '~-/*' }]), '\\~-/*');
+	t.equal(quote([{ op: 'glob', pattern: '~x*' }]), '\\~x*');
+	t.equal(quote([{ op: 'glob', pattern: 'a~b*' }]), 'a\\~b*');
+	t.end();
+});
+
 test('quote comment', function (t) {
 	t.equal(quote(['echo', 'hi', { comment: ' a comment' }]), 'echo hi # a comment');
 	t.equal(quote([{ comment: '' }]), '#');
