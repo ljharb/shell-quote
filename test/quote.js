@@ -128,6 +128,16 @@ test('quote glob pattern', function (t) {
 	t.end();
 });
 
+test('quote glob: an empty pattern is an empty argument, not a dropped one', function (t) {
+	t.equal(quote([{ op: 'glob', pattern: '' }]), '\'\'', 'an empty pattern quotes to an empty argument');
+	t.equal(
+		quote(['cmd', { op: 'glob', pattern: '' }, 'after']),
+		'cmd \'\' after',
+		'an empty pattern keeps its argv slot instead of vanishing'
+	);
+	t.end();
+});
+
 test('quote glob tilde (escapes every ~ to prevent shell tilde-expansion)', function (t) {
 	t.equal(quote([{ op: 'glob', pattern: '~/*.txt' }]), '\\~/*.txt', 'glob metas still pass through');
 	t.equal(quote([{ op: 'glob', pattern: '~root/.bashr*' }]), '\\~root/.bashr*');

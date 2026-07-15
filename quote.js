@@ -38,6 +38,9 @@ module.exports = function quote(xs) {
 				if (LINE_TERMINATORS.test(s.pattern)) {
 					throw new TypeError('glob `pattern` must not contain line terminators');
 				}
+				if (s.pattern === '') {
+					return /** @type {const} */ ('\'\'');
+				}
 				return s.pattern.replace(GLOB_SHELL_SPECIAL, '\\$&');
 			}
 			if ('op' in s && typeof s.op === 'string') {
