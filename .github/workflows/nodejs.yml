@@ -5,6 +5,8 @@ on: [push, pull_request]
 permissions:
   contents: read
 
+cache-mode: none
+
 jobs:
   matrix:
     runs-on: ubuntu-latest
