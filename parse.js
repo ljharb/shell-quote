@@ -175,7 +175,6 @@ function parseInternal(string, env, opts) {
 				i = varend;
 			} else if ((/[*@#?$!_-]/).test(char)) {
 				varname = char;
-				i += 1;
 			} else {
 				var slicedFromI = s.slice(i);
 				varend = slicedFromI.match(/[^\w\d_]/);

@@ -50,3 +50,35 @@ test('special shell parameters', function (t) {
 		t.same(parse('a $' + c + ' c', env), ['a', 'xxx', 'c']);
 	});
 });
+
+test('special shell parameters preserve adjacent text', function (t) {
+	'*@#?-$!'.split('').forEach(function (c) {
+		var env = {};
+		env[c] = 'value';
+		t.same(parse('$' + c + 'suffix', env), ['valuesuffix'], 'unquoted $' + c + ' with a suffix');
+		t.same(parse('"$' + c + 'suffix"', env), ['valuesuffix'], 'double-quoted $' + c + ' with a suffix');
+		t.same(parse('$' + c + ':suffix', env), ['value:suffix'], '$' + c + ' followed by punctuation');
+		t.same(parse('$' + c, env), ['value'], '$' + c + ' at the end of input');
+		t.same(parse('"$' + c + '"', env), ['value'], '$' + c + ' before a closing quote');
+	});
+
+	t.end();
+});
+
+test('resume parsing syntax after a special shell parameter', function (t) {
+	var env = { '?': '1', '!': '2' };
+	t.same(parse('$?$!', env), ['12'], 'expand consecutive special parameters');
+	t.same(parse('"$?$!"', env), ['12'], 'expand consecutive special parameters inside double quotes');
+	t.same(parse('$?\\ suffix', env), ['1 suffix'], 'handle an escaped space after a special parameter');
+	t.same(parse('"$?"\'suffix\'', env), ['1suffix'], 'close double quotes before entering single quotes');
+	t.same(parse('$?;echo', env), ['1', { op: ';' }, 'echo'], 'preserve a control operator after a special parameter');
+	t.same(parse('$?suffix'), ['suffix'], 'preserve the suffix when the parameter is unset');
+	t.same(parse('$?suffix', { '?': 'one two' }, { splitUnquoted: true }), ['one', 'twosuffix'], 'append the suffix to the last split field');
+	t.same(parse('$?$!', function (key) { return env[key]; }), ['12'], 'expand consecutive special parameters with a lookup function');
+	t.same(parse('$?\'#x\' y', env), ['1#x', 'y'], 'open single quotes right after a special parameter');
+	t.same(parse('$?"a;b"', env), ['1a;b'], 'open double quotes right after a special parameter');
+	t.same(parse('$?\\$x', { '?': '1', x: 'X' }), ['1$x'], 'keep an escaped dollar sign after a special parameter literal');
+	t.same(parse('$?*', env), [{ op: 'glob', pattern: '1*' }], 'a glob character after a special parameter makes a glob');
+
+	t.end();
+});
