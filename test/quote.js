@@ -1,6 +1,7 @@
 'use strict';
 
 var test = require('tape');
+var execFile = require('child_process').execFile;
 var quote = require('../').quote;
 var parse = require('../').parse;
 
@@ -17,7 +18,7 @@ test('quote', function (t) {
 	t.equal(quote([]), '');
 	t.equal(quote(['a\nb']), "'a\nb'");
 	t.equal(quote([' #(){}*|][!']), "' #(){}*|][!'");
-	t.equal(quote(["'#(){}*|][!"]), '"\'#(){}*|][\\!"');
+	t.equal(quote(["'#(){}*|][!"]), "''\"'\"'#(){}*|][!'");
 	t.equal(quote(['X#(){}*|][!']), 'X\\#\\(\\)\\{\\}\\*\\|\\]\\[\\!');
 	t.equal(quote(['a\n#\nb']), "'a\n#\nb'");
 	t.equal(quote(['><;{}']), '\\>\\<\\;\\{\\}');
@@ -58,6 +59,23 @@ test('escapes shell-special characters conservatively (issue #11)', function (t)
 	t.equal(quote(['a,b']), 'a\\,b', 'escapes , (brace expansion)');
 	t.equal(quote(['a!b']), 'a\\!b', 'escapes ! (history expansion / pipeline negation)');
 	t.end();
+});
+
+var apostropheBangValues = ["O'Brien!", "'!", "a\\'!b", 'O\'Brien! "$HOME" `printf unexpected`;\n[*]'];
+
+test('quote apostrophes with exclamation marks', function (t) {
+	t.equal(quote(["O'Brien!"]), "'O'\"'\"'Brien!'");
+	t.equal(quote(['plain', "O'Brien!", '']), "plain 'O'\"'\"'Brien!' ''");
+	t.same(parse(quote(apostropheBangValues)), apostropheBangValues, 'quoted values round-trip through parse');
+	t.end();
+});
+
+test('apostrophes and exclamation marks survive a POSIX shell', { skip: process.platform === 'win32' }, function (t) {
+	execFile('/bin/sh', ['-c', "printf '%s\\0' " + quote(apostropheBangValues)], function (err, stdout) {
+		t.error(err, 'the shell exits cleanly');
+		t.same(stdout.split('\0').slice(0, -1), apostropheBangValues, 'the shell receives the original arguments');
+		t.end();
+	});
 });
 
 test('quote ops', function (t) {
