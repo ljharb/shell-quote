@@ -82,3 +82,20 @@ test('resume parsing syntax after a special shell parameter', function (t) {
 
 	t.end();
 });
+
+test('`$_` followed by name characters is a longer variable name', function (t) {
+	var env = {
+		_: 'A',
+		_foo: 'B',
+		__: 'C',
+		_1: 'D'
+	};
+	t.same(parse('$_foo', env), ['B'], '`$_foo` is the variable `_foo`');
+	t.same(parse('$__', env), ['C'], '`$__` is the variable `__`');
+	t.same(parse('$_1', env), ['D'], '`$_1` is the variable `_1`');
+	t.same(parse('"$_foo"', env), ['B'], 'double-quoted `$_foo` is the variable `_foo`');
+	t.same(parse('$_:x', env), ['A:x'], '`$_` followed by punctuation');
+	t.same(parse('$_', env), ['A'], '`$_` at the end of input');
+
+	t.end();
+});

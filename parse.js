@@ -173,7 +173,7 @@ function parseInternal(string, env, opts) {
 				varend -= 1;
 				varname = s.slice(i, varend);
 				i = varend;
-			} else if ((/[*@#?$!_-]/).test(char)) {
+			} else if ((/[*@#?$!-]/).test(char)) {
 				varname = char;
 			} else {
 				var slicedFromI = s.slice(i);
