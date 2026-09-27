@@ -2,6 +2,7 @@
 
 var test = require('tape');
 var quote = require('../').quote;
+var parse = require('../').parse;
 
 test('quote', function (t) {
 	t.equal(quote(['a', 'b', 'c d']), 'a b \'c d\'');
@@ -154,6 +155,27 @@ test('quote comment', function (t) {
 	t['throws'](function () { quote([{ comment: 'a\nb' }]); }, TypeError, 'newline in comment');
 	t['throws'](function () { quote([{ comment: 'a\rb' }]); }, TypeError, 'CR in comment');
 	t['throws'](function () { quote([{ comment: 'a\u2028b' }]); }, TypeError, 'U+2028 in comment');
+	t.end();
+});
+
+test('quote comment: rejects line terminators in later tokens', function (t) {
+	t['throws'](function () { quote(['echo', { comment: 'x' }, 'a\nid;#']); }, TypeError, 'newline after a comment');
+	t['throws'](function () { quote(['echo', { comment: 'x' }, 'a\rb']); }, TypeError, 'CR after a comment');
+	t['throws'](function () { quote(['echo', { comment: 'x' }, 'a\u2028b']); }, TypeError, 'U+2028 after a comment');
+	t['throws'](function () { quote(['echo', { comment: 'x' }, 'a\u2029b']); }, TypeError, 'U+2029 after a comment');
+	t['throws'](
+		function () { quote(['echo', { comment: 'x' }, 'ok', 'it\'s\nid;#']); },
+		TypeError,
+		'newline in any later token, not just the next one'
+	);
+	t['throws'](
+		function () { quote(parse('curl http://x/#frag').concat('a\nid;#')); },
+		TypeError,
+		'a mid-word `#` from parse, followed by an appended token'
+	);
+
+	t.equal(quote(['echo', 'a\nb', { comment: 'x' }]), 'echo \'a\nb\' #x', 'a line terminator before a comment is fine');
+	t.equal(quote(['echo', { comment: 'x' }, 'y']), 'echo #x y', 'later tokens without line terminators are unchanged');
 	t.end();
 });
 

@@ -5,7 +5,8 @@ import parse = require('./parse');
  *
  * Accepts strings and the object shapes that {@link parse} emits. Throws a
  * `TypeError` for unrecognized object shapes, `op` values outside the
- * allowlist, or `pattern`/`comment` values containing line terminators.
+ * allowlist, `pattern`/`comment` values containing line terminators, or
+ * strings containing line terminators anywhere after a `comment`.
  *
  * @param args - Array of tokens to quote.
  * @returns A shell-safe quoted string.

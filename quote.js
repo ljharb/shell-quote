@@ -26,7 +26,11 @@ var GLOB_SHELL_SPECIAL = /[\s#!"$&'():;<=>@\\^`|~]/g;
 
 /** @type {typeof import('./quote')} */
 module.exports = function quote(xs) {
+	var sawComment = false;
 	return xs.map(function (s) {
+		if (sawComment && typeof s === 'string' && LINE_TERMINATORS.test(s)) {
+			throw new TypeError('a token after a `comment` must not contain line terminators');
+		}
 		if (s === '') {
 			return /** @type {const} */ ('\'\'');
 		}
@@ -53,6 +57,7 @@ module.exports = function quote(xs) {
 				if (LINE_TERMINATORS.test(s.comment)) {
 					throw new TypeError('`comment` must not contain line terminators');
 				}
+				sawComment = true;
 				return '#' + s.comment;
 			}
 			throw new TypeError('unrecognized object token shape');

@@ -125,8 +125,9 @@ Each entry of `args` may be a string, or one of the object shapes that
 `parse` emits: `{ op }` (where `op` is one of the control operators
 `||`, `&&`, `;;`, `|&`, `<(`, `<<<`, `>>`, `>&`, `<&`, `&`, `;`, `(`,
 `)`, `|`, `<`, `>`), `{ op: 'glob', pattern }`, or `{ comment }`. Any
-other object shape, an unrecognized `op`, or a `pattern`/`comment`
-containing line terminators throws a `TypeError`.
+other object shape, an unrecognized `op`, a `pattern`/`comment`
+containing line terminators, or a string containing line terminators
+anywhere after a `{ comment }` throws a `TypeError`.
 
 The output is POSIX shell (`sh`/`bash`) quoting.
 It is not valid for Windows `cmd.exe` or PowerShell,
