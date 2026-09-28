@@ -25,7 +25,6 @@ var CONTROL = /** @type {const} */ ('(?:') + /** @type {const} */ ([
 var controlRE = new RegExp('^' + CONTROL + '$');
 var META = /** @type {const} */ ('|&;()<> \\t');
 var SINGLE_QUOTE = /** @type {const} */ ('\'([^\']*?)\'');
-var DOUBLE_QUOTE = /** @type {const} */ ('"((\\\\"|[^"])*?)"');
 var hash = /^#$/;
 
 var SQ = /** @type {const} */ ("'");
@@ -92,7 +91,8 @@ function parseInternal(string, env, opts) {
 	}
 	var BS = opts.escape || '\\';
 	var ifs = opts.splitUnquoted === true ? ' \t\n' : (typeof opts.splitUnquoted === 'string' ? opts.splitUnquoted : '');
-	var BAREWORD = '(\\' + BS + '[\'"' + META + ']|[^\\s\'"' + META + '])+';
+	var BAREWORD = '(\\' + BS + '[\'"\\' + BS + META + ']|[^\\s\'"' + META + '])+';
+	var DOUBLE_QUOTE = '"(?:\\' + BS + '[\\s\\S]|[^"\\' + BS + '])*"';
 
 	var chunker = new RegExp([
 		'(' + CONTROL + ')', // control chars

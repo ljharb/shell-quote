@@ -77,6 +77,33 @@ test('unmatched single quotes', function (t) {
 	t.end();
 });
 
+test('an escaped backslash does not escape the character after it', function (t) {
+	t.same(parse('a\\\\ b'), ['a\\', 'b'], 'a space after an escaped backslash separates words');
+	t.same(parse('a\\\\;echo b'), ['a\\', { op: ';' }, 'echo', 'b'], 'a `;` after an escaped backslash is an operator');
+	t.same(parse('x\\\\|cat'), ['x\\', { op: '|' }, 'cat'], 'a `|` after an escaped backslash is an operator');
+	t.same(parse('a\\\\"b c"'), ['a\\b c'], 'a `"` after an escaped backslash opens a quoted string');
+	t.same(parse('"a\\\\" b'), ['a\\', 'b'], 'an escaped backslash does not escape a closing `"`');
+	t.same(parse('"a\\\\" "b"'), ['a\\', 'b'], 'a double-quoted string ends at its first unescaped `"`');
+	t.same(parse('"a\\\\";echo "b"'), ['a\\', { op: ';' }, 'echo', 'b'], 'a `;` after a closing `"` is an operator');
+	t.same(parse('"a\\\\\\"b" c'), ['a\\"b', 'c'], 'an escaped backslash then an escaped `"` inside double quotes');
+	t.same(parse('\\\\\\ y'), ['\\ y'], 'an escaped backslash then an escaped space');
+	t.same(
+		parse('dir "C:\\Program Files\\"', {}, { escape: '^' }),
+		['dir', 'C:\\Program Files\\'],
+		'with a custom escape, a backslash before a closing `"` is literal'
+	);
+
+	t.end();
+});
+
+test('double-quoted strings stay linear with a custom escape', function (t) {
+	// a double-quote pattern that ignores the custom escape rescans to the end at every `"`
+	var input = new Array(1e5 + 1).join('\\"');
+	t.same(parse(input, {}, { escape: '^' }), [new Array(1e5 + 1).join('\\')], 'one word of backslashes');
+
+	t.end();
+});
+
 test('nested parameter expansion', function (t) {
 	t.same(parse('${a${b}c}'), [''], 'a nested ${} is consumed as one substitution, not split at the first }');
 	t.same(parse('${a${b}}'), [''], 'a nested ${} at the end is consumed as one substitution');
