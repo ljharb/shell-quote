@@ -174,3 +174,59 @@ test('parse stays linear in token count (GHSA-395f-4hp3-45gv)', function (t) {
 
 	t.end();
 });
+
+test('ANSI-C quoting', function (t) {
+	t.same(parse('$\'\''), [''], 'empty ANSI-C string');
+	t.same(parse('$\'abc\''), ['abc'], 'plain ANSI-C string');
+	t.same(parse('echo $\'it\\\'s\''), ['echo', 'it\'s'], 'an escaped quote does not end the string');
+	t.same(parse('$\'{"a":"${field}"}\''), ['{"a":"${field}"}'], 'variables are not expanded');
+	t.same(parse('$\'$HOME\'', { HOME: '/home/robot' }), ['$HOME'], 'env is not consulted');
+	t.same(parse('$\'cost is $5\''), ['cost is $5'], 'no word splitting, no expansion');
+	t.same(parse('foo$\'\\n\'bar'), ['foo\nbar'], 'mid-token ANSI-C string');
+	t.same(parse('a $\'x\' b'), ['a', 'x', 'b'], 'standalone ANSI-C string is its own word');
+
+	t.same(parse('$\'line1\\nline2\''), ['line1\nline2'], '\\n is decoded');
+	t.same(parse('$\'tab\\there\''), ['tab\there'], '\\t is decoded');
+	t.same(parse('$\'\\x41\''), ['A'], '\\xHH is decoded');
+	t.same(parse('$\'\\x4\''), ['\u0004'], 'a single hex digit is decoded');
+	t.same(parse('$\'\\101\''), ['A'], 'octal escapes are decoded');
+	t.same(parse('$\'\\u0041\''), ['A'], '\\uHHHH is decoded');
+	t.same(parse('$\'\\U0001F600\''), ['\uD83D\uDE00'], '\\UHHHHHHHH is decoded, as a surrogate pair');
+	t.same(parse('$\'\\U00110000\''), ['\\U00110000'], 'an out of range \\U escape is left alone');
+	t.same(parse('$\'\\e\''), ['\u001B'], '\\e is ESC');
+	t.same(parse('$\'\\ca\''), ['\u0001'], '\\ca is a control character');
+	t.same(parse('$\'\\c?\''), ['\u007F'], '\\c? is DEL');
+	t.same(parse('$\'a\\"b\''), ['a"b'], '\\" is a double quote');
+	t.same(parse('$\'a\\\\b\''), ['a\\b'], 'a doubled backslash is a backslash');
+	t.same(parse('$\'a\\zb\''), ['a\\zb'], 'an unrecognized escape keeps its backslash');
+	t.same(parse('$\'\\xzz\''), ['\\xzz'], '\\x with no hex digits keeps its backslash');
+
+	t.same(parse('"a$\'\\n\'b"'), ['a$\'\\n\'b'], 'not special inside double quotes');
+
+	t.end();
+});
+
+test('ANSI-C quoting: word boundaries and edge cases', function (t) {
+	t.same(parse('a$\'x\\\' y\''), ['ax\' y'], 'an escaped quote mid-word does not end the string');
+	t.same(parse('x$\'a\\\'b\' | c \'z\''), ['xa\'b', { op: '|' }, 'c', 'z'], 'an operator after a mid-word ANSI-C string is an operator');
+	t.same(parse('a$\'x\\\' ; y\''), ['ax\' ; y'], 'a `;` inside an ANSI-C string is not an operator');
+	t.same(parse('x\\\\$\'it\\\'s\' y'), ['x\\it\'s', 'y'], 'an ANSI-C string after an escaped backslash');
+	t.same(parse('$\'abc\\\''), ['$abc\\'], 'an unterminated ANSI-C string is not decoded');
+	t.same(parse('$A$\'x\'', { A: 'a ' }, { splitUnquoted: true }), ['a', 'x'], 'a pending field split ends before an ANSI-C string');
+	t.same(parse('a $\'\' b', {}, { splitUnquoted: true }), ['a', '', 'b'], 'an empty ANSI-C string is an empty word');
+	t.same(parse('$\'a\\0b\'c'), ['ac'], 'a NUL ends the string, as in bash');
+	t.same(parse('$\'\\477\''), ['?'], 'octal escapes are masked to 8 bits');
+	t.same(parse('$\'\\c\\\\\''), ['\u001C'], '\\c\\\\ is one control character');
+	t.same(parse('$\'a\\c\''), ['a\\c'], 'a trailing \\c keeps its backslash');
+	t.same(parse('$\'a\\nb\'', {}, { escape: '^' }), ['a\nb'], 'a backslash is always the escape inside $\'...\'');
+
+	t.end();
+});
+
+test('ANSI-C quoting stays linear on an unterminated string', function (t) {
+	// an ambiguous body pattern backtracks exponentially here, so this would hang rather than fail
+	var backslashes = new Array(1e5 + 1).join('\\');
+	t.same(parse('$\'' + backslashes), ['$', backslashes.slice(5e4)], 'an unterminated $\' then 100000 backslashes');
+
+	t.end();
+});

@@ -39,6 +39,20 @@ output
 [ 'a', 'b c', '$def', "it's great" ]
 ```
 
+## parse with ANSI-C quoting
+
+```js
+var parse = require('shell-quote/parse');
+var xs = parse("echo $'it\\'s a \\n test'");
+console.dir(xs);
+```
+
+output
+
+```
+[ 'echo', "it's a \n test" ]
+```
+
 ## parse with an environment variable
 
 ```js
@@ -158,6 +172,15 @@ using the default `IFS` (space, tab, newline).
 Pass a string to use its characters as the `IFS` instead
 (for example `{ splitUnquoted: ':' }`).
 A quoted expansion (`"$VAR"`) is never split.
+
+Bash [ANSI-C quoting](https://www.gnu.org/software/bash/manual/html_node/ANSI_002dC-Quoting.html)
+(`$'...'`) is supported: escape sequences (such as `\n`, `\t`, `\\`, `\'`, `\"`,
+`\xHH`, `\uHHHH`, `\UHHHHHHHH`, `\nnn`, and `\cx`) are decoded, an unrecognized
+escape keeps its backslash, and the contents are never word-split and never
+variable-expanded, so `${VAR}` inside `$'...'` stays literal. As in bash,
+`$'...'` is not special inside double or single quotes, and a NUL ends the string.
+Since the result is a JavaScript string, `\xHH` and `\nnn` produce the character
+with that code (U+0000 to U+00FF), not a raw byte.
 
 Only simple `$VARNAME` and `${VARNAME}` interpolation is supported.
 Bash parameter expansion beyond a plain variable name is not evaluated:

@@ -25,6 +25,12 @@ var CONTROL = /** @type {const} */ ('(?:') + /** @type {const} */ ([
 var controlRE = new RegExp('^' + CONTROL + '$');
 var META = /** @type {const} */ ('|&;()<> \\t');
 var SINGLE_QUOTE = /** @type {const} */ ('\'([^\']*?)\'');
+// bash ANSI-C quoting, `$'...'`: a backslash escapes the next character, including `'`
+var ANSI_C_BODY = '(?:\\\\[\\s\\S]|[^\\\\\'])*?';
+var ANSI_C_QUOTE = '\\$\'' + ANSI_C_BODY + '\'';
+var ansiCAt = new RegExp('\\$\'' + ANSI_C_BODY + '(?:(\')|\\\\?$)', 'g');
+var ANSI_C_LETTERS = 'abeEfnrtv';
+var ANSI_C_CHARS = '\x07\b\x1B\x1B\f\n\r\t\v';
 var hash = /^#$/;
 
 var SQ = /** @type {const} */ ("'");
@@ -79,6 +85,46 @@ function getVar(env, pre, key) {
 	return pre + r;
 }
 
+var ansiCEscape = /\\([0-7]{1,3}|x[\dA-Fa-f]{1,2}|u[\dA-Fa-f]{1,4}|U[\dA-Fa-f]{1,8}|c(?:\\\\|[\s\S])|[abeEfnrtv\\'"?])/g;
+
+/**
+ * @param {string} m
+ * @param {string} escape
+ */
+function expandAnsiCEscape(m, escape) {
+	var kind = escape.charAt(0);
+	if (kind === 'c') {
+		var ctrl = escape.charAt(1);
+		return ctrl === '?' ? '\x7F' : String.fromCharCode(ctrl.charCodeAt(0) & 0x1F);
+	}
+	if (kind === 'x' || kind === 'u' || kind === 'U') {
+		var cp = parseInt(escape.slice(1), 16);
+		if (cp > 0x10FFFF) {
+			return m;
+		}
+		return String.fromCharCode.apply(null, cp > 0xFFFF ? [0xD7C0 + (cp >> 10), 0xDC00 + (cp & 0x3FF)] : [cp]);
+	}
+	if (kind >= '0' && kind <= '7') {
+		return String.fromCharCode(parseInt(escape, 8) & 0xFF);
+	}
+	var letter = ANSI_C_LETTERS.indexOf(escape);
+	return letter < 0 ? escape : ANSI_C_CHARS.charAt(letter);
+}
+
+/** @param {string} body */
+function expandAnsiC(body) {
+	return body.replace(ansiCEscape, expandAnsiCEscape).split('\0')[0]; // like bash, a NUL ends the string
+}
+
+/**
+ * @param {string} s
+ * @param {number} i
+ */
+function closesAnsiC(s, i) {
+	ansiCAt.lastIndex = i;
+	return !!(/** @type {RegExpExecArray} */ (ansiCAt.exec(s)))[1];
+}
+
 /**
  * @param {string} string
  * @param {Env} [env]
@@ -91,12 +137,12 @@ function parseInternal(string, env, opts) {
 	}
 	var BS = opts.escape || '\\';
 	var ifs = opts.splitUnquoted === true ? ' \t\n' : (typeof opts.splitUnquoted === 'string' ? opts.splitUnquoted : '');
-	var BAREWORD = '(\\' + BS + '[\'"\\' + BS + META + ']|[^\\s\'"' + META + '])+';
+	var BAREWORD = '(\\' + BS + '[\'"$\\' + BS + META + ']|\\$\\$|\\$(?!' + ANSI_C_QUOTE.slice(2) + ')|[^\\s\'"$' + META + '])+';
 	var DOUBLE_QUOTE = '"(?:\\' + BS + '[\\s\\S]|[^"\\' + BS + '])*"';
 
 	var chunker = new RegExp([
 		'(' + CONTROL + ')', // control chars
-		'(' + BAREWORD + '|' + DOUBLE_QUOTE + '|' + SINGLE_QUOTE + ')+'
+		'(' + ANSI_C_QUOTE + '|' + BAREWORD + '|' + DOUBLE_QUOTE + '|' + SINGLE_QUOTE + ')+'
 	].join('|'), 'g');
 
 	var matches = matchAll(string, chunker);
@@ -251,6 +297,11 @@ function parseInternal(string, env, opts) {
 				return /** @type {const} */ ([commentObj]);
 			} else if (c === BS) {
 				esc = true;
+			} else if (c === DS && s.charAt(i + 1) === SQ && closesAnsiC(s, i)) {
+				flushRun();
+				sawQuote = true;
+				out += expandAnsiC(s.slice(i + 2, ansiCAt.lastIndex - 1));
+				i = ansiCAt.lastIndex - 1;
 			} else if (c === DS) {
 				var value = parseEnvVar();
 				if (!ifs) {
