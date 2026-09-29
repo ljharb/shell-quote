@@ -66,7 +66,7 @@ module.exports = function quote(xs) {
 			return "'" + s.replace(/'/g, "'\"'\"'") + "'";
 		}
 		if ((/["\s\\]/).test(s) && !(/'/).test(s)) {
-			return "'" + s.replace(/(['])/g, '\\$1') + "'";
+			return "'" + s + "'";
 		}
 		if ((/["'\s]/).test(s)) {
 			return '"' + s.replace(/(["\\$`])/g, '\\$1') + '"';
