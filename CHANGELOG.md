@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.11.0](https://github.com/ljharb/shell-quote/compare/v1.10.0...v1.11.0) - 2026-09-29
+
+### Fixed
+
+- [Refactor] `quote`: drop a replace that can never match in the single-quote branch [`#15`](https://github.com/ljharb/shell-quote/issues/15)
+- [New] `parse`: support bash ANSI-C quoting (`$'...'`) [`#32`](https://github.com/ljharb/shell-quote/issues/32)
+
+### Commits
+
+- [Fix] `quote`: reject line terminators in tokens after a `comment` [`6002b2e`](https://github.com/ljharb/shell-quote/commit/6002b2ed90c6b83095eb272b6b0adaf3a172b0bc)
+- [Fix] `parse`: preserve text after special shell parameters [`81b08a5`](https://github.com/ljharb/shell-quote/commit/81b08a532e898a3627f9305fa13d643ffa82a9d3)
+- [Fix] `parse`: an escaped backslash does not escape the character after it [`d708019`](https://github.com/ljharb/shell-quote/commit/d708019016ce26e1a8a05af4b296e35ef8095c9e)
+- [Fix] `quote`: preserve `!` in arguments that also contain `'` [`ad39927`](https://github.com/ljharb/shell-quote/commit/ad399279dbbbd086967d2040c1558b4888b074e6)
+- [Fix] `parse`: treat `$_name` as a variable name, not `$_` followed by text [`28f88cd`](https://github.com/ljharb/shell-quote/commit/28f88cd422ae4046aca9556c4b74ca90b0ea7f6b)
+- [Fix] `quote`: preserve empty glob patterns [`35c9b97`](https://github.com/ljharb/shell-quote/commit/35c9b97a744211091b772f145bef0b6a5562b68e)
+- [Fix] `quote`: escape `~` in glob patterns to prevent shell tilde-expansion [`239d49c`](https://github.com/ljharb/shell-quote/commit/239d49cae6d231436ea4e676850037018c790c49)
+- [Dev Deps] update `@ljharb/eslint-config`, `auto-changelog`, `eslint`, `evalmd` [`b1e406e`](https://github.com/ljharb/shell-quote/commit/b1e406ed4287a134cc649db47b9a59e21b304472)
+- [meta] npmignore some files [`ebfc308`](https://github.com/ljharb/shell-quote/commit/ebfc3080cf5f68db5edfddfba49dc8c4ccacd2d5)
+- [actions] add permissions [`3429b0d`](https://github.com/ljharb/shell-quote/commit/3429b0d349211786765e9e68478e029d96ad44e9)
+- [actions] set least-privilege `cache-mode` [`36f2394`](https://github.com/ljharb/shell-quote/commit/36f23944db50dd3f0df4da9c7cba0bb63df05f64)
+- [Dev Deps] update `eslint` [`6de9a41`](https://github.com/ljharb/shell-quote/commit/6de9a41ecfc4fe9f9546df08866c8ead039f8909)
+
 ## [v1.10.0](https://github.com/ljharb/shell-quote/compare/v1.9.0...v1.10.0) - 2026-07-10
 
 ### Merged
