@@ -66,8 +66,12 @@
 	"publishConfig": {
 		"ignore": [
 			".github/workflows",
+			".nycrc",
+			"eslint.config.mjs",
 			"example",
-			"CHANGELOG.md"
+			"CHANGELOG.md",
+			"security.md",
+			"test"
 		]
 	},
 	"engines": {
