@@ -194,6 +194,27 @@ test('redirecting output despite noclobber', function (t) {
 	t.end();
 });
 
+test('output process substitution', function (t) {
+	t.same(parse('beep >(boop)'), ['beep', { op: '>(' }, 'boop', { op: ')' }]);
+	t.same(parse('beep>(boop)'), ['beep', { op: '>(' }, 'boop', { op: ')' }]);
+	t.same(parse('beep > >(boop)'), ['beep', { op: '>' }, { op: '>(' }, 'boop', { op: ')' }]);
+	t.same(
+		parse('beep >(boop) <(byte)'),
+		['beep', { op: '>(' }, 'boop', { op: ')' }, { op: '<(' }, 'byte', { op: ')' }]
+	);
+
+	t.same(parse('beep > (boop)'), ['beep', { op: '>' }, { op: '(' }, 'boop', { op: ')' }], 'separated');
+	t.same(parse('beep \\>\\(boop\\)'), ['beep', '>(boop)'], 'escaped');
+	t.same(parse('beep ">(boop)"'), ['beep', '>(boop)'], 'quoted');
+	t.same(parse('beep >(boop)', {}, { escape: '^' }), ['beep', { op: '>(' }, 'boop', { op: ')' }], 'with a custom escape');
+	t.same(parse('beep ^>^(boop^)', {}, { escape: '^' }), ['beep', '>(boop)'], 'escaped with a custom escape');
+
+	t.same(parse('beep >&(boop)'), ['beep', { op: '>&' }, { op: '(' }, 'boop', { op: ')' }], '`>&` wins over `>(`');
+	t.same(parse('beep <>(boop)'), ['beep', { op: '<>' }, { op: '(' }, 'boop', { op: ')' }], '`<>` wins over `>(`');
+
+	t.end();
+});
+
 test('glob patterns', function (t) {
 	t.same(
 		parse('tap test/*.test.js'),
