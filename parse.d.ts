@@ -1,7 +1,7 @@
 declare namespace parse {
 	/** A shell control operator. */
 	export interface ControlOperator {
-		op: '||' | '&&' | ';;' | '|&' | '<(' | '>(' | '<<<' | '<<-' | '<<' | '>>' | '>&' | '>|' | '&>>' | '&>' | '<&' | '<>' | '&' | ';' | '(' | ')' | '|' | '<' | '>';
+		op: '||' | '&&' | ';;' | ';&' | '|&' | '<(' | '>(' | '<<<' | '<<-' | '<<' | '>>' | '>&' | '>|' | '&>>' | '&>' | '<&' | '<>' | '&' | ';' | '(' | ')' | '|' | '<' | '>';
 	}
 
 	/** A glob pattern parsed from the shell command. */
