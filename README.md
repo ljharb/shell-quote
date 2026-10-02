@@ -137,8 +137,9 @@ commands.
 
 Each entry of `args` may be a string, or one of the object shapes that
 `parse` emits: `{ op }` (where `op` is one of the control operators
-`||`, `&&`, `;;`, `|&`, `<(`, `<<<`, `>>`, `>&`, `<&`, `&`, `;`, `(`,
-`)`, `|`, `<`, `>`), `{ op: 'glob', pattern }`, or `{ comment }`. Any
+`||`, `&&`, `;;`, `|&`, `<(`, `<<<`, `<<`, `>>`, `>&`, `<&`, `&`, `;`,
+`(`, `)`, `|`, `<`, `>`),
+`{ op: 'glob', pattern }`, or `{ comment }`. Any
 other object shape, an unrecognized `op`, a `pattern`/`comment`
 containing line terminators, or a string containing line terminators
 anywhere after a `{ comment }` throws a `TypeError`.
@@ -209,6 +210,13 @@ parses as:
 ```
 [ 'beep', { op: '||' }, 'boop', { op: '>' }, '/byte' ]
 ```
+
+The here-document operator (`<<`) is emitted like any other operator,
+followed by the delimiter word.
+The here-document body is not recognized:
+a newline is whitespace to `parse`,
+so the lines after the command are parsed as ordinary tokens,
+subject to quoting, comments, globs, and variable expansion.
 
 # install
 

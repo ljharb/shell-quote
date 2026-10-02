@@ -91,6 +91,48 @@ test('here strings', function (t) {
 	t.end();
 });
 
+test('here documents', function (t) {
+	t.same(parse('cat > tmp.txt << a'), ['cat', { op: '>' }, 'tmp.txt', { op: '<<' }, 'a']);
+	t.same(parse('cat << EOF'), ['cat', { op: '<<' }, 'EOF']);
+	t.same(parse('cat<<EOF'), ['cat', { op: '<<' }, 'EOF']);
+	t.same(parse('cat <<\'EOF\''), ['cat', { op: '<<' }, 'EOF']);
+	t.same(parse('cat <<"E OF"'), ['cat', { op: '<<' }, 'E OF']);
+	t.same(parse('cat 3<<EOF'), ['cat', '3', { op: '<<' }, 'EOF']);
+	t.same(parse('cat <<a <<b'), ['cat', { op: '<<' }, 'a', { op: '<<' }, 'b']);
+	t.same(parse('cat <<EOF | wc -l'), ['cat', { op: '<<' }, 'EOF', { op: '|' }, 'wc', '-l']);
+	t.same(parse('cat <<'), ['cat', { op: '<<' }], 'at the end of the input');
+
+	t.same(parse('cat < < a'), ['cat', { op: '<' }, { op: '<' }, 'a'], 'separated `<` are still two operators');
+	t.same(parse('cat \\<\\< a'), ['cat', '<<', 'a'], 'escaped');
+	t.same(parse('cat \\<< a'), ['cat', '<', { op: '<' }, 'a'], 'partly escaped');
+	t.same(parse('cat "<<" a'), ['cat', '<<', 'a'], 'quoted');
+	t.same(parse('cat ^<^< a', {}, { escape: '^' }), ['cat', '<<', 'a'], 'escaped with a custom escape');
+	t.same(parse('cat << a', {}, { escape: '^' }), ['cat', { op: '<<' }, 'a'], 'unescaped with a custom escape');
+
+	t.same(parse('cat <<<< a'), ['cat', { op: '<<<' }, { op: '<' }, 'a'], '`<<<` wins over `<<`');
+	t.same(parse('cat <<<<< a'), ['cat', { op: '<<<' }, { op: '<<' }, 'a']);
+	t.same(parse('cat <<& a'), ['cat', { op: '<<' }, { op: '&' }, 'a'], '`<<` wins over `<&`');
+
+	t.same(
+		parse('cat <<(boop)'),
+		['cat', { op: '<' }, { op: '<(' }, 'boop', { op: ')' }],
+		'`<<(` is `<` and `<(`, as zsh reads it'
+	);
+	t.same(
+		parse('cat << (boop)'),
+		['cat', { op: '<<' }, { op: '(' }, 'boop', { op: ')' }],
+		'a separated `(` does not split `<<`'
+	);
+
+	t.same(
+		parse('cat << EOF\nhello\nEOF\n'),
+		['cat', { op: '<<' }, 'EOF', 'hello', 'EOF'],
+		'the body is not recognized'
+	);
+
+	t.end();
+});
+
 test('glob patterns', function (t) {
 	t.same(
 		parse('tap test/*.test.js'),
