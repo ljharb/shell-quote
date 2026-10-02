@@ -21,7 +21,7 @@ var CONTROL = /** @type {const} */ ('(?:') + /** @type {const} */ ([
 	'\\<\\<(?!\\()', // `<<(` stays `<` and `<(`, as zsh reads it; other shells reject it
 	'>>',
 	'>\\&',
-	'<\\&',
+	'<[&>]', // `<&` and `<>`
 	'[&;()|<>]'
 ]).join(/** @type {const} */ ('|')) + /** @type {const} */ (')');
 var controlRE = new RegExp('^' + CONTROL + '$');

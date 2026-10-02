@@ -157,6 +157,24 @@ test('here documents that strip leading tabs', function (t) {
 	t.end();
 });
 
+test('opening a file for reading and writing', function (t) {
+	t.same(parse('beep <> boop'), ['beep', { op: '<>' }, 'boop']);
+	t.same(parse('beep<>boop'), ['beep', { op: '<>' }, 'boop']);
+	t.same(parse('beep 3<>boop'), ['beep', '3', { op: '<>' }, 'boop']);
+
+	t.same(parse('beep < > boop'), ['beep', { op: '<' }, { op: '>' }, 'boop'], 'separated');
+	t.same(parse('beep \\<\\> boop'), ['beep', '<>', 'boop'], 'escaped');
+	t.same(parse('beep "<>" boop'), ['beep', '<>', 'boop'], 'quoted');
+	t.same(parse('beep <> boop', {}, { escape: '^' }), ['beep', { op: '<>' }, 'boop'], 'with a custom escape');
+	t.same(parse('beep ^<^> boop', {}, { escape: '^' }), ['beep', '<>', 'boop'], 'escaped with a custom escape');
+
+	t.same(parse('beep >< boop'), ['beep', { op: '>' }, { op: '<' }, 'boop'], '`><` is not an operator');
+	t.same(parse('beep <>> boop'), ['beep', { op: '<>' }, { op: '>' }, 'boop']);
+	t.same(parse('beep <<> boop'), ['beep', { op: '<<' }, { op: '>' }, 'boop'], '`<<` wins over `<>`');
+
+	t.end();
+});
+
 test('glob patterns', function (t) {
 	t.same(
 		parse('tap test/*.test.js'),
