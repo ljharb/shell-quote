@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.12.0](https://github.com/ljharb/shell-quote/compare/v1.11.0...v1.12.0) - 2026-10-02
+
+### Fixed
+
+- [New] `parse`: support here-documents (`&lt;&lt;`) [`#31`](https://github.com/ljharb/shell-quote/issues/31)
+
+### Commits
+
+- [New] `parse`: support tab-stripping here-documents (`&lt;&lt;-`) [`dbfac37`](https://github.com/ljharb/shell-quote/commit/dbfac376d4065d37539d3abdb5e76847f93797d3)
+- [New] `parse`: support output process substitution (`&gt;(`) [`2053315`](https://github.com/ljharb/shell-quote/commit/20533154bb57809c80f55318b8493aef49505f4e)
+- [New] `parse`: support the `case` test-next terminator (`;;&`) [`7d688b9`](https://github.com/ljharb/shell-quote/commit/7d688b9bec1917a22cccd4d4c887128a9c66e8a0)
+- [New] `parse`: support the `case` fall-through terminator (`;&`) [`f27010e`](https://github.com/ljharb/shell-quote/commit/f27010ed04bcd925795b350afb1c49e36bbd1ba3)
+- [New] `parse`: support redirecting output despite `noclobber` (`&gt;|`) [`b78d19c`](https://github.com/ljharb/shell-quote/commit/b78d19c14da6356cc12c46b3478203247ab8a295)
+- [New] `parse`: support opening a file for reading and writing (`&lt;&gt;`) [`21cc333`](https://github.com/ljharb/shell-quote/commit/21cc333eb0ce5bf094f595b7fdc01b3447ffd4b0)
+- [New] `parse`: support redirecting stdout and stderr (`&&gt;`) [`6ad6cd2`](https://github.com/ljharb/shell-quote/commit/6ad6cd215f89adcc29dd601e085fa54083c2f911)
+- [New] `parse`: support appending stdout and stderr (`&&gt;&gt;`) [`90cde9c`](https://github.com/ljharb/shell-quote/commit/90cde9cfd8af30fcb65e9fd2cb2f9e181d3f103b)
+- [Dev Deps] update `@ljharb/eslint-config` [`3a7b4ae`](https://github.com/ljharb/shell-quote/commit/3a7b4ae3960c3ff4413932e276c5b0ecb3a2b456)
+
 ## [v1.11.0](https://github.com/ljharb/shell-quote/compare/v1.10.0...v1.11.0) - 2026-09-29
 
 ### Fixed
