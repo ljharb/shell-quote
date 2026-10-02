@@ -133,6 +133,30 @@ test('here documents', function (t) {
 	t.end();
 });
 
+test('here documents that strip leading tabs', function (t) {
+	t.same(parse('cat <<-EOF'), ['cat', { op: '<<-' }, 'EOF']);
+	t.same(parse('cat <<- EOF'), ['cat', { op: '<<-' }, 'EOF']);
+	t.same(parse('cat<<-EOF'), ['cat', { op: '<<-' }, 'EOF']);
+	t.same(parse('cat <<-\'EOF\''), ['cat', { op: '<<-' }, 'EOF']);
+	t.same(parse('cat <<--EOF'), ['cat', { op: '<<-' }, '-EOF']);
+
+	t.same(parse('cat << -EOF'), ['cat', { op: '<<' }, '-EOF'], 'a separated `-` belongs to the delimiter');
+	t.same(parse('cat <<\\-EOF'), ['cat', { op: '<<' }, '-EOF'], 'an escaped `-` belongs to the delimiter');
+	t.same(parse('cat <<"-EOF"'), ['cat', { op: '<<' }, '-EOF'], 'a quoted `-` belongs to the delimiter');
+	t.same(parse('cat \\<\\<- a'), ['cat', '<<-', 'a'], 'escaped');
+	t.same(parse('cat "<<-" a'), ['cat', '<<-', 'a'], 'quoted');
+	t.same(parse('cat <<<-EOF'), ['cat', { op: '<<<' }, '-EOF'], '`<<<` wins over `<<-`');
+	t.same(
+		parse('cat <<-(boop)'),
+		['cat', { op: '<<-' }, { op: '(' }, 'boop', { op: ')' }],
+		'`<<-(` is `<<-` and `(`, as every shell reads it'
+	);
+	t.same(parse('cat <<-EOF', {}, { escape: '^' }), ['cat', { op: '<<-' }, 'EOF'], 'with a custom escape');
+	t.same(parse('cat <<^-EOF', {}, { escape: '^' }), ['cat', { op: '<<' }, '-EOF'], 'escaped with a custom escape');
+
+	t.end();
+});
+
 test('glob patterns', function (t) {
 	t.same(
 		parse('tap test/*.test.js'),
