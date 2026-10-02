@@ -271,6 +271,27 @@ test('case clause fall-through', function (t) {
 	t.end();
 });
 
+test('case clause that tests the next pattern', function (t) {
+	t.same(
+		parse('case x in a) beep ;;& b) boop ;; esac'),
+		['case', 'x', 'in', 'a', { op: ')' }, 'beep', { op: ';;&' }, 'b', { op: ')' }, 'boop', { op: ';;' }, 'esac']
+	);
+	t.same(parse('beep;;&boop'), ['beep', { op: ';;&' }, 'boop']);
+
+	t.same(parse('beep ;; & boop'), ['beep', { op: ';;' }, { op: '&' }, 'boop'], 'separated');
+	t.same(parse('beep ; ;& boop'), ['beep', { op: ';' }, { op: ';&' }, 'boop'], 'partly separated');
+	t.same(parse('beep \\;\\;\\& boop'), ['beep', ';;&', 'boop'], 'escaped');
+	t.same(parse('beep ";;&" boop'), ['beep', ';;&', 'boop'], 'quoted');
+	t.same(parse('beep ;;& boop', {}, { escape: '^' }), ['beep', { op: ';;&' }, 'boop'], 'with a custom escape');
+	t.same(parse('beep ^;^;^& boop', {}, { escape: '^' }), ['beep', ';;&', 'boop'], 'escaped with a custom escape');
+
+	t.same(parse('beep ;;&& boop'), ['beep', { op: ';;&' }, { op: '&' }, 'boop'], '`;;&` wins over `&&`');
+	t.same(parse('beep ;;; boop'), ['beep', { op: ';;' }, { op: ';' }, 'boop']);
+	t.same(parse('beep ;;;& boop'), ['beep', { op: ';;' }, { op: ';&' }, 'boop']);
+
+	t.end();
+});
+
 test('glob patterns', function (t) {
 	t.same(
 		parse('tap test/*.test.js'),
