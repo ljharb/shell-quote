@@ -215,6 +215,25 @@ test('output process substitution', function (t) {
 	t.end();
 });
 
+test('redirecting stdout and stderr', function (t) {
+	t.same(parse('beep &> boop'), ['beep', { op: '&>' }, 'boop']);
+	t.same(parse('beep&>boop'), ['beep', { op: '&>' }, 'boop']);
+	t.same(parse('beep &>/dev/null'), ['beep', { op: '&>' }, '/dev/null']);
+
+	t.same(parse('beep & > boop'), ['beep', { op: '&' }, { op: '>' }, 'boop'], 'separated');
+	t.same(parse('beep \\&\\> boop'), ['beep', '&>', 'boop'], 'escaped');
+	t.same(parse('beep "&>" boop'), ['beep', '&>', 'boop'], 'quoted');
+	t.same(parse('beep &> boop', {}, { escape: '^' }), ['beep', { op: '&>' }, 'boop'], 'with a custom escape');
+	t.same(parse('beep ^&^> boop', {}, { escape: '^' }), ['beep', '&>', 'boop'], 'escaped with a custom escape');
+
+	t.same(parse('beep &>(boop)'), ['beep', { op: '&>' }, { op: '(' }, 'boop', { op: ')' }], '`&>` wins over `>(`');
+	t.same(parse('beep &&> boop'), ['beep', { op: '&&' }, { op: '>' }, 'boop'], '`&&` wins over `&>`');
+	t.same(parse('beep >&> boop'), ['beep', { op: '>&' }, { op: '>' }, 'boop'], '`>&` wins over `&>`');
+	t.same(parse('beep |&> boop'), ['beep', { op: '|&' }, { op: '>' }, 'boop'], '`|&` wins over `&>`');
+
+	t.end();
+});
+
 test('glob patterns', function (t) {
 	t.same(
 		parse('tap test/*.test.js'),
