@@ -12,7 +12,7 @@
 // can be parsed the same as control operator
 var CONTROL = /** @type {const} */ ('(?:') + /** @type {const} */ ([
 	'\\|\\|',
-	'\\&[&>]', // `&&` and `&>`
+	'\\&(?:\\&|>>?)', // `&&`, `&>`, and `&>>`
 	';;',
 	'\\|\\&',
 	'\\<\\(',

@@ -154,6 +154,12 @@ test('quote ops: redirecting stdout and stderr', function (t) {
 	t.end();
 });
 
+test('quote ops: appending stdout and stderr', function (t) {
+	t.equal(quote([{ op: '&>>' }]), '\\&\\>\\>');
+	t.equal(quote(parse('beep &>> boop')), 'beep \\&\\>\\> boop');
+	t.end();
+});
+
 test('quote ops: rejects line terminators (GHSA-w7jw-789q-3m8p)', function (t) {
 	t['throws'](function () { quote([{ op: ';\nid' }]); }, TypeError, 'newline in op');
 	t['throws'](function () { quote([{ op: ';\rid' }]); }, TypeError, 'carriage return in op');
