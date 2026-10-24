@@ -96,6 +96,15 @@ test('an escaped backslash does not escape the character after it', function (t)
 	t.end();
 });
 
+test('a backslash inside double quotes escapes a backtick and a newline', function (t) {
+	t.same(parse('"a\\`b"'), ['a`b'], 'an escaped backtick');
+	t.same(parse('"a\\\nb"'), ['ab'], 'a backslash-newline is removed');
+	t.same(parse('"a\\b"'), ['a\\b'], 'a backslash before another character stays');
+	t.same(parse(quote(["it's `x`"])), ["it's `x`"], 'quote/parse round-trips a backtick next to an apostrophe');
+
+	t.end();
+});
+
 test('double-quoted strings stay linear with a custom escape', function (t) {
 	// a double-quote pattern that ignores the custom escape rescans to the end at every `"`
 	var input = new Array(1e5 + 1).join('\\"');

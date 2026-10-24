@@ -38,6 +38,7 @@ var hash = /^#$/;
 var SQ = /** @type {const} */ ("'");
 var DQ = /** @type {const} */ ('"');
 var DS = /** @type {const} */ ('$');
+var BQ = /** @type {const} */ ('`');
 
 var TOKEN = '';
 var mult = /** @type {const} */ (0x100000000); // Math.pow(16, 8);
@@ -172,7 +173,7 @@ function parseInternal(string, env, opts) {
 		// 1. inside single quotes, all characters are printed literally.
 		// 2. inside double quotes, all characters are printed literally
 		//    except variables prefixed by '$' and backslashes followed by
-		//    either a double quote or another backslash.
+		//    a double quote, another backslash, '$', '`' or a newline.
 		// 3. outside of any quotes, backslashes are treated as escape
 		//    characters and not printed (unless they are themselves escaped)
 		// 4. quote context can switch mid-token if there is no whitespace
@@ -274,9 +275,9 @@ function parseInternal(string, env, opts) {
 					if (c === BS) {
 						i += 1;
 						c = s.charAt(i);
-						if (c === DQ || c === BS || c === DS) {
+						if (c === DQ || c === BS || c === DS || c === BQ) {
 							out += c;
-						} else {
+						} else if (c !== '\n') { // a backslash-newline is a line continuation
 							out += BS + c;
 						}
 					} else if (c === DS) {
