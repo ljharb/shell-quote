@@ -77,6 +77,17 @@ test('unmatched single quotes', function (t) {
 	t.end();
 });
 
+test('a backslash-newline outside quotes is a line continuation', function (t) {
+	t.same(parse('cmd --a \\\n  --b'), ['cmd', '--a', '--b'], 'between words');
+	t.same(parse('a\\\nb'), ['ab'], 'inside a word');
+	t.same(parse('a \\\n'), ['a'], 'at the end');
+	t.same(parse('a\\\n\\\nb'), ['ab'], 'twice in a row');
+	t.same(parse("x 'a\\\nb'"), ['x', 'a\\\nb'], 'not inside single quotes');
+	t.same(parse('dir ^\nx', {}, { escape: '^' }), ['dir', 'x'], 'with a custom escape');
+
+	t.end();
+});
+
 test('an escaped backslash does not escape the character after it', function (t) {
 	t.same(parse('a\\\\ b'), ['a\\', 'b'], 'a space after an escaped backslash separates words');
 	t.same(parse('a\\\\;echo b'), ['a\\', { op: ';' }, 'echo', 'b'], 'a `;` after an escaped backslash is an operator');

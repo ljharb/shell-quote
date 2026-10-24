@@ -139,7 +139,7 @@ function parseInternal(string, env, opts) {
 	}
 	var BS = opts.escape || '\\';
 	var ifs = opts.splitUnquoted === true ? ' \t\n' : (typeof opts.splitUnquoted === 'string' ? opts.splitUnquoted : '');
-	var BAREWORD = '(\\' + BS + '[\'"$\\' + BS + META + ']|\\$\\$|\\$(?!' + ANSI_C_QUOTE.slice(2) + ')|[^\\s\'"$' + META + '])+';
+	var BAREWORD = '(\\' + BS + '[\'"$\\' + BS + META + '\\n]|\\$\\$|\\$(?!' + ANSI_C_QUOTE.slice(2) + ')|[^\\s\'"$' + META + '])+';
 	var DOUBLE_QUOTE = '"(?:\\' + BS + '[\\s\\S]|[^"\\' + BS + '])*"';
 
 	var chunker = new RegExp([
@@ -160,7 +160,8 @@ function parseInternal(string, env, opts) {
 
 	return matches.map(function (match) {
 		var s = match[0];
-		if (!s || commented) {
+		// a chunk of nothing but line continuations (escaped newlines) is not a word
+		if (!s || commented || !s.split(BS + '\n').join('')) {
 			return void undefined;
 		}
 		if (controlRE.test(s)) {
@@ -263,7 +264,7 @@ function parseInternal(string, env, opts) {
 			}
 			isGlob = isGlob || (!quote && (c === '*' || c === '?'));
 			if (esc) {
-				out += c;
+				out += c === '\n' ? '' : c; // a backslash-newline is a line continuation
 				esc = false;
 			} else if (quote) {
 				if (c === quote) {
