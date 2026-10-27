@@ -68,6 +68,26 @@ test('single quotes are literal', function (t) {
 	t.end();
 });
 
+test('escaped glob characters are literal', function (t) {
+	t.same(parse('\\*'), ['*'], 'an escaped `*` is a plain string, not a glob');
+	t.same(parse('\\?'), ['?'], 'an escaped `?` is a plain string, not a glob');
+	t.same(parse('a\\*b\\?c'), ['a*b?c'], 'escaped glob characters inside a word stay literal');
+	t.same(parse('echo \\* \\?'), ['echo', '*', '?'], 'escaped glob characters in separate words');
+	t.same(parse('^*', {}, { escape: '^' }), ['*'], 'escaped with a custom escape');
+	t.same(parse('\\*"*"'), ['**'], 'an escaped and a quoted glob character');
+	t.equal(parse('\\**')[0].op, 'glob', 'an unescaped glob character after an escaped one still makes a glob');
+	t.equal(parse('\\\\*')[0].op, 'glob', 'an escaped backslash does not escape the glob character after it');
+
+	t.end();
+});
+
+test('quote/parse round-trips glob characters', function (t) {
+	var values = ['*', '?', 'a*b', 'a?b', '*?', 'a b*', '~*', '*}', '[*]'];
+	t.same(parse(quote(values)), values, 'quoted glob characters stay strings after parse');
+
+	t.end();
+});
+
 test('unmatched single quotes', function (t) {
 	// real shells reject unterminated quotes; parse is lenient, and these pin the shape of that leniency
 	t.same(parse("'"), [], 'a lone quote is dropped');

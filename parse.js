@@ -261,7 +261,7 @@ function parseInternal(string, env, opts) {
 			if (ifs && c !== DS) {
 				flushRun();
 			}
-			isGlob = isGlob || (!quote && (c === '*' || c === '?'));
+			isGlob = isGlob || (!esc && !quote && (c === '*' || c === '?'));
 			if (esc) {
 				out += c;
 				esc = false;
