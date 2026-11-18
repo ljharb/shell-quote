@@ -290,13 +290,9 @@ function parseInternal(string, env, opts) {
 				sawQuote = true;
 			} else if (controlRE.test(c)) {
 				return /** @type {ControlOperator} */ ({ op: s });
-			} else if (hash.test(c)) {
+			} else if (hash.test(c) && i === 0) {
 				commented = true;
-				var commentObj = { comment: string.slice(match.index + i + 1) };
-				if (out.length) {
-					return /** @type {const} */ ([out, commentObj]);
-				}
-				return /** @type {const} */ ([commentObj]);
+				return /** @type {const} */ ([{ comment: string.slice(match.index + 1) }]);
 			} else if (c === BS) {
 				esc = true;
 			} else if (c === DS && s.charAt(i + 1) === SQ && closesAnsiC(s, i)) {

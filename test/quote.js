@@ -241,9 +241,14 @@ test('quote comment: rejects line terminators in later tokens', function (t) {
 		'newline in any later token, not just the next one'
 	);
 	t['throws'](
-		function () { quote(parse('curl http://x/#frag').concat('a\nid;#')); },
+		function () { quote(parse('curl http://x/ #frag').concat('a\nid;#')); },
 		TypeError,
-		'a mid-word `#` from parse, followed by an appended token'
+		'a comment from parse, followed by an appended token'
+	);
+	t.deepEqual(
+		parse(quote(parse('curl http://x/#frag').concat('a\nid;#'))),
+		['curl', 'http://x/#frag', 'a\nid;#'],
+		'a mid-word `#` from parse stays in its word, so an appended token round-trips'
 	);
 
 	t.equal(quote(['echo', 'a\nb', { comment: 'x' }]), 'echo \'a\nb\' #x', 'a line terminator before a comment is fine');
